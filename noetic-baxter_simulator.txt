@@ -1,0 +1,212 @@
+diff --git a/baxter_gazebo/launch/baxter_world.launch b/baxter_gazebo/launch/baxter_world.launch
+index ac43ae6..62c45c9 100644
+--- a/baxter_gazebo/launch/baxter_world.launch
++++ b/baxter_gazebo/launch/baxter_world.launch
+@@ -19,7 +19,7 @@
+              to launching baxter_world -->
+   <arg name="load_robot_description" default="true"/>
+   <param if="$(arg load_robot_description)" name="robot_description"
+-      command="$(find xacro)/xacro.py --inorder $(find baxter_description)/urdf/baxter.urdf.xacro gazebo:=true"/>
++      command="$(find xacro)/xacro $(find baxter_description)/urdf/baxter.urdf.xacro gazebo:=true"/>
+ 
+   <!-- We resume the logic in empty_world.launch, changing the name of the world to be launched -->
+   <include file="$(find gazebo_ros)/launch/empty_world.launch">
+diff --git a/baxter_sim_examples/scripts/ik_pick_and_place_demo.py b/baxter_sim_examples/scripts/ik_pick_and_place_demo.py
+index 2e88e9c..fec2fa1 100755
+--- a/baxter_sim_examples/scripts/ik_pick_and_place_demo.py
++++ b/baxter_sim_examples/scripts/ik_pick_and_place_demo.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+diff --git a/baxter_sim_hardware/CMakeLists.txt b/baxter_sim_hardware/CMakeLists.txt
+index 0bb9264..7231f64 100644
+--- a/baxter_sim_hardware/CMakeLists.txt
++++ b/baxter_sim_hardware/CMakeLists.txt
+@@ -16,7 +16,7 @@ find_package(Boost REQUIRED COMPONENTS system)
+ find_package(cmake_modules REQUIRED)
+ find_package(OpenCV REQUIRED)
+ 
+-find_package(Eigen REQUIRED)
++find_package(Eigen3 REQUIRED)
+ catkin_package(
+   INCLUDE_DIRS include
+   CATKIN_DEPENDS
+diff --git a/baxter_sim_hardware/src/baxter_emulator.cpp b/baxter_sim_hardware/src/baxter_emulator.cpp
+index 4b51f47..5d3b75e 100644
+--- a/baxter_sim_hardware/src/baxter_emulator.cpp
++++ b/baxter_sim_hardware/src/baxter_emulator.cpp
+@@ -318,7 +318,7 @@ void baxter_emulator::publish(const std::string &img_path) {
+   // Read OpenCV Mat image and convert it to ROS message
+   cv_bridge::CvImagePtr cv_ptr(new cv_bridge::CvImage);
+   try {
+-    cv_ptr->image = cv::imread(img_path, CV_LOAD_IMAGE_UNCHANGED);
++    cv_ptr->image = cv::imread(img_path, cv::IMREAD_UNCHANGED); //cdr4eelz// WAS: CV_LOAD_IMAGE_UNCHANGED
+     if (cv_ptr->image.data) {
+       cv_ptr->encoding = sensor_msgs::image_encodings::BGR8;
+       sleep(IMG_LOAD_ON_STARTUP_DELAY);  // Wait for the model to load
+diff --git a/baxter_sim_io/CMakeLists.txt b/baxter_sim_io/CMakeLists.txt
+index ac596f7..44ac6c9 100644
+--- a/baxter_sim_io/CMakeLists.txt
++++ b/baxter_sim_io/CMakeLists.txt
+@@ -12,7 +12,8 @@ project(baxter_sim_io)
+ # qt_build provides the qt cmake glue, roscpp the comms for a default talker
+ #find_package(catkin REQUIRED COMPONENTS qt_build roscpp baxter_core_msgs)
+ find_package(catkin REQUIRED COMPONENTS roscpp baxter_core_msgs)
+-find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui)
++#cdr4eelz# find_package(Qt5 REQUIRED COMPONENTS QtCore QtGui)
++find_package(Qt5Widgets REQUIRED)
+ include_directories(${catkin_INCLUDE_DIRS})
+ # Use this to define what the package will export (e.g. libs, headers).
+ # Since the default here is to produce only a binary, we don't worry about
+@@ -26,7 +27,8 @@ LIBRARIES ${PROJECT_NAME}
+ 
+ include_directories(include
+   ${catkin_INCLUDE_DIRS}
+-  ${QT_INCLUDES}
++  #cdr4eelz#  ${QT_INCLUDES}
++  ${Qt5Widgets_INCLUDES}
+ )
+ ##############################################################################
+ # Qt Environment
+@@ -38,16 +40,16 @@ include_directories(include
+ ##############################################################################
+ # Sections
+ ##############################################################################
+-include(${QT_USE_FILE})
++#cdr4eelz# include(${QT_USE_FILE})
+ include_directories(${CMAKE_CURRENT_BINARY_DIR})
+ 
+ file(GLOB QT_FORMS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ui/*.ui)
+ file(GLOB QT_RESOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} resources/*.qrc)
+ file(GLOB_RECURSE QT_MOC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINKS include/baxter_sim_io/*.hpp)
+ 
+-QT4_ADD_RESOURCES(QT_RESOURCES_CPP ${QT_RESOURCES})
+-QT4_WRAP_UI(QT_FORMS_HPP ${QT_FORMS})
+-QT4_WRAP_CPP(QT_MOC_HPP ${QT_MOC})
++QT5_ADD_RESOURCES(QT_RESOURCES_CPP ${QT_RESOURCES})
++QT5_WRAP_UI(QT_FORMS_HPP ${QT_FORMS})
++QT5_WRAP_CPP(QT_MOC_HPP ${QT_MOC})
+ 
+ ##############################################################################
+ # Sources
+@@ -60,7 +62,9 @@ file(GLOB_RECURSE QT_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINK
+ ##############################################################################
+ 
+ add_executable(baxter_sim_io ${QT_SOURCES} ${QT_RESOURCES_CPP} ${QT_FORMS_HPP} ${QT_MOC_HPP})
+-target_link_libraries(baxter_sim_io ${QT_LIBRARIES} ${ROS_LIBRARIES} ${catkin_LIBRARIES})
++#cdr4eelz# target_link_libraries(baxter_sim_io ${Qt5Widgets_LIBRARIES} ${ROS_LIBRARIES} ${catkin_LIBRARIES})
++target_link_libraries(baxter_sim_io ${ROS_LIBRARIES} ${catkin_LIBRARIES})
++qt5_use_modules(baxter_sim_io Widgets)
+ 
+ add_dependencies(baxter_sim_io baxter_core_msgs_gencpp)
+ 
+diff --git a/baxter_sim_io/include/baxter_sim_io/baxter_io.hpp b/baxter_sim_io/include/baxter_sim_io/baxter_io.hpp
+index 5e72d24..b10b4a6 100644
+--- a/baxter_sim_io/include/baxter_sim_io/baxter_io.hpp
++++ b/baxter_sim_io/include/baxter_sim_io/baxter_io.hpp
+@@ -35,7 +35,8 @@
+ #ifndef BAXTER_SIM_IO_BAXTER_IO_H
+ #define BAXTER_SIM_IO_BAXTER_IO_H
+ 
+-#include <QtGui/QMainWindow>
++//cdr4eelz// #include <QtGui/QMainWindow>
++#include <QtWidgets/QMainWindow>
+ #include <QBitmap>
+ #include <QPushButton>
+ #include "ui_baxter_io.h"
+diff --git a/baxter_sim_io/package.xml b/baxter_sim_io/package.xml
+index 6937b2c..26698b1 100644
+--- a/baxter_sim_io/package.xml
++++ b/baxter_sim_io/package.xml
+@@ -13,11 +13,13 @@
+   <buildtool_depend>catkin</buildtool_depend>
+   <!--build_depend>qt_build</build_depend-->
+   <build_depend>roscpp</build_depend>
+-  <build_depend>libqt4-dev</build_depend>
++  <build_depend>libqt5x11extras5-dev</build_depend>
++  <!--cdr4eelz <build_depend>libqt4-dev</build_depend> -->
+   <build_depend>baxter_core_msgs</build_depend>
+   <!--run_depend>qt_build</run_depend-->
+   <run_depend>roscpp</run_depend>
+-  <run_depend>libqt4-dev</run_depend>
++  <run_depend>libqt5x11extras5-dev</run_depend>
++  <!--cdr4eelz <run_depend>libqt4-dev</run_depend> -->
+   <run_depend>baxter_core_msgs</run_depend>
+  
+ </package>
+diff --git a/baxter_sim_io/src/baxter_io.cpp b/baxter_sim_io/src/baxter_io.cpp
+index fa746b9..21259ff 100644
+--- a/baxter_sim_io/src/baxter_io.cpp
++++ b/baxter_sim_io/src/baxter_io.cpp
+@@ -32,7 +32,8 @@
+  *  \desc   Includes the action listener events for the QT controls
+  */
+ 
+-#include <QtGui>
++//cdr4eelz// #include <QtGui>
++#include <QtWidgets>
+ #include <QMessageBox>
+ #include <iostream>
+ #include <baxter_sim_io/baxter_io.hpp>
+diff --git a/baxter_sim_io/src/main.cpp b/baxter_sim_io/src/main.cpp
+index a16cb59..0e32ac4 100644
+--- a/baxter_sim_io/src/main.cpp
++++ b/baxter_sim_io/src/main.cpp
+@@ -30,7 +30,8 @@
+ /**
+  *  \author Hariharasudan Malaichamee
+  */
+-#include <QtGui>
++//cdr4eelz// #include <QtGui>
++#include <QtWidgets>
+ #include <QApplication>
+ #include <baxter_sim_io/baxter_io.hpp>
+ #include <baxter_sim_io/qnode.hpp>
+diff --git a/baxter_sim_kinematics/CMakeLists.txt b/baxter_sim_kinematics/CMakeLists.txt
+index b9b59e9..be733e1 100644
+--- a/baxter_sim_kinematics/CMakeLists.txt
++++ b/baxter_sim_kinematics/CMakeLists.txt
+@@ -13,7 +13,7 @@ find_package(catkin
+ )
+ 
+ find_package(cmake_modules REQUIRED)
+-find_package(Eigen REQUIRED)
++find_package(Eigen3 REQUIRED)
+ 
+ catkin_package(
+   INCLUDE_DIRS include
+diff --git a/baxter_sim_kinematics/src/arm_kinematics.cpp b/baxter_sim_kinematics/src/arm_kinematics.cpp
+index 24d7b0d..6e27b79 100644
+--- a/baxter_sim_kinematics/src/arm_kinematics.cpp
++++ b/baxter_sim_kinematics/src/arm_kinematics.cpp
+@@ -245,14 +245,15 @@ bool Kinematics::loadModel(const std::string xml) {
+  */
+ bool Kinematics::readJoints(urdf::Model &robot_model) {
+   num_joints = 0;
+-  boost::shared_ptr<const urdf::Link> link = robot_model.getLink(tip_name);
+-  boost::shared_ptr<const urdf::Joint> joint;
++  //cdr4eelz// boost::shared_ptr<const urdf::Link> link = robot_model.getLink(tip_name);
++  //cdr4eelz// boost::shared_ptr<const urdf::Joint> joint;
++  auto link = robot_model.getLink(tip_name);
+   for (int i = 0; i < chain.getNrOfSegments(); i++)
+     while (link && link->name != root_name) {
+       if (!(link->parent_joint)) {
+         break;
+       }
+-      joint = robot_model.getJoint(link->parent_joint->name);
++      auto joint = robot_model.getJoint(link->parent_joint->name);
+       if (!joint) {
+         ROS_ERROR("Could not find joint: %s", link->parent_joint->name.c_str());
+         return false;
+@@ -272,7 +273,7 @@ bool Kinematics::readJoints(urdf::Model &robot_model) {
+   link = robot_model.getLink(tip_name);
+   unsigned int i = 0;
+   while (link && i < num_joints) {
+-    joint = robot_model.getJoint(link->parent_joint->name);
++    auto joint = robot_model.getJoint(link->parent_joint->name);
+     if (joint->type != urdf::Joint::UNKNOWN
+         && joint->type != urdf::Joint::FIXED) {
+       ROS_INFO("getting bounds for joint: [%s]", joint->name.c_str());

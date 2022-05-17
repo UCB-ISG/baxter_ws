@@ -1,0 +1,10 @@
+./src/baxter_examples/scripts/navigator_io.py:#!/usr/bin/python2
+./src/baxter_examples/scripts/gripper_cuff_control.py:#!/usr/bin/python2
+./src/baxter_examples/scripts/xdisplay_image.py:#!/usr/bin/python2
+./src/baxter_examples/scripts/send_urdf_fragment.py:#!/usr/bin/python2
+./src/baxter_tools/scripts/camera_control.py:#!/usr/bin/python2
+./src/baxter_tools/scripts/enable_robot.py:#!/usr/bin/python2
+./src/baxter_tools/scripts/calibrate_arm.py:#!/usr/bin/python2
+./src/baxter_tools/scripts/update_robot.py:#!/usr/bin/python2
+./src/baxter_tools/scripts/tare.py:#!/usr/bin/python2
+./src/baxter_interface/src/joint_trajectory_action/bezier.py:#! /usr/bin/python
