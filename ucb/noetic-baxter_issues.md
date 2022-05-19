@@ -1,11 +1,13 @@
 # Known Issues so far
 
-- baxter_sim_example that uses IK fails to find solution
-    This is not a bug in the example python script itself
-    The failure happens in a service node (likely in the simulator/emulator itself)
+- Test test test & more testing!
 
 
 # Speculative status
+
+## FIXED:
+### baxter_sim_example now works after fixing KDL call with output size mismatch.
+
 
 ## GUI seems functional (xx v4 => v5)
 ### Python interpreter explicitly set (seems effective)

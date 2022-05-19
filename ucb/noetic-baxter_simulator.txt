@@ -210,3 +210,15 @@ index 24d7b0d..6e27b79 100644
      if (joint->type != urdf::Joint::UNKNOWN
          && joint->type != urdf::Joint::FIXED) {
        ROS_INFO("getting bounds for joint: [%s]", joint->name.c_str());
+diff --git a/baxter_sim_kinematics/src/arm_kinematics.cpp b/baxter_sim_kinematics/src/arm_kinematics.cpp
+index 32d91f6..66f998b 100644
+--- a/baxter_sim_kinematics/src/arm_kinematics.cpp
++++ b/baxter_sim_kinematics/src/arm_kinematics.cpp
+@@ -445,6 +445,7 @@ bool arm_kinematics::Kinematics::getPositionIK(const geometry_msgs::PoseStamped&
+   KDL::JntArray jnt_pos_out;
+ 
+   jnt_pos_in.resize(num_joints);
++  jnt_pos_out.resize(num_joints);  //WARN: Necessary to make CartToJnt happy (otherwise returns -4)
+   // Copying the positions of the joints relative to its index in the KDL chain
+   for (unsigned int i = 0; i < num_joints; i++)
+   {
