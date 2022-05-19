@@ -1,0 +1,16 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/opt/baxter_ws/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ],
+    "ros.distro": "noetic",
+    "workbench.experimental.editor.dropIntoEditor.enabled": false,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "files.exclude": {
+        "**/.catkin_workspace": true,
+        "build/": true,
+        "devel/": true,
+        "install/": true
+    }
+}

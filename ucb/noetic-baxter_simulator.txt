@@ -222,3 +222,41 @@ index 32d91f6..66f998b 100644
    // Copying the positions of the joints relative to its index in the KDL chain
    for (unsigned int i = 0; i < num_joints; i++)
    {
+diff --git a/baxter_sim_io/CMakeLists.txt b/baxter_sim_io/CMakeLists.txt
+index a5e8825..99ac0c7 100644
+--- a/baxter_sim_io/CMakeLists.txt
++++ b/baxter_sim_io/CMakeLists.txt
+@@ -15,7 +15,8 @@ SET(CMAKE_CXX_FLAGS "-fPIC")
+ 
+ set(CMAKE_AUTOMOC ON)
+ find_package(catkin REQUIRED COMPONENTS roscpp baxter_core_msgs)
+-find_package(Qt5Widgets REQUIRED)
++#find_package(Qt5Widgets REQUIRED)
++find_package(Qt5 REQUIRED Core Widgets)
+ 
+ include_directories(${catkin_INCLUDE_DIRS})
+ # Use this to define what the package will export (e.g. libs, headers).
+diff --git a/baxter_sim_io/package.xml b/baxter_sim_io/package.xml
+index d1f1796..47077bb 100644
+--- a/baxter_sim_io/package.xml
++++ b/baxter_sim_io/package.xml
+@@ -12,9 +12,19 @@
+ 
+   <buildtool_depend>catkin</buildtool_depend>
+   <!--build_depend>qt_build</build_depend-->
++  <build_depend>libogre-dev</build_depend>
++  <build_depend>qtbase5-dev</build_depend>
++  <build_depend>libqt5-opengl-dev</build_depend>
++
+   <build_depend>roscpp</build_depend>
+   <build_depend>baxter_core_msgs</build_depend>
+   <!--run_depend>qt_build</run_depend-->
++  <build_depend>libogre</build_depend>
++  <run_depend>libqt5-core</run_depend>
++  <run_depend>libqt5-gui</run_depend>
++  <run_depend>libqt5-widgets</run_depend>
++  <run_depend>libqt5-opengl</run_depend>
++
+   <run_depend>roscpp</run_depend>
+   <run_depend>baxter_core_msgs</run_depend>
+ 
