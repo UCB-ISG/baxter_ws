@@ -1,0 +1,180 @@
+ .gitignore                                         |  2 [32m++[m
+ .rosinstall                                        |  2 [32m+[m[31m-[m
+ atlas_moveit_config/config/kinematics.yaml~        | 36 [31m----------------------[m
+ iri_wam_moveit_config/scripts/modules/common.py    | 22 [32m++++++[m[31m-------[m
+ .../scripts/simple_moveit_example.py               |  8 [32m++[m[31m---[m
+ r2_moveit_generated/launch/upload_r2.launch        |  4 [32m+[m[31m--[m
+ 6 files changed, 20 insertions(+), 54 deletions(-)
+
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mindex 63e6b27..0e35a6b 100644[m
+[1m--- a/.gitignore[m
+[1m+++ b/.gitignore[m
+[36m@@ -1,2 +1,4 @@[m
+[32m+[m[32m*~[m
+[32m+[m
+ CATKIN_IGNORE[m
+ default_warehouse_mongo_db/[m
+[1mdiff --git a/.rosinstall b/.rosinstall[m
+[1mindex 061cfe5..fbb9e8c 100644[m
+[1m--- a/.rosinstall[m
+[1m+++ b/.rosinstall[m
+[36m@@ -3,4 +3,4 @@[m
+ - git:[m
+     local-name: baxter_common[m
+     uri: https://github.com/RethinkRobotics/baxter_common.git[m
+[31m-    version: kinetic-devel[m
+[32m+[m[32m    version: ucb-noetic-devel[m
+[1mdiff --git a/atlas_moveit_config/config/kinematics.yaml~ b/atlas_moveit_config/config/kinematics.yaml~[m
+[1mdeleted file mode 100644[m
+[1mindex 90df127..0000000[m
+[1m--- a/atlas_moveit_config/config/kinematics.yaml~[m
+[1m+++ /dev/null[m
+[36m@@ -1,36 +0,0 @@[m
+[31m-right_arm:[m
+[31m-  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin[m
+[31m-  kinematics_solver_search_resolution: 0.005[m
+[31m-  kinematics_solver_timeout: 0.005[m
+[31m-  kinematics_solver_attempts: 3[m
+[31m-left_arm:[m
+[31m-  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin[m
+[31m-  kinematics_solver_search_resolution: 0.005[m
+[31m-  kinematics_solver_timeout: 0.005[m
+[31m-  kinematics_solver_attempts: 3[m
+[31m-right_arm_torso:[m
+[31m-  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin[m
+[31m-  kinematics_solver_search_resolution: 0.005[m
+[31m-  kinematics_solver_timeout: 0.005[m
+[31m-  kinematics_solver_attempts: 3[m
+[31m-  redundant_joints:[m
+[31m-    - back_lbz[m
+[31m-    - back_mby[m
+[31m-left_arm_torso:[m
+[31m-  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin[m
+[31m-  kinematics_solver_search_resolution: 0.005[m
+[31m-  kinematics_solver_timeout: 0.005[m
+[31m-  kinematics_solver_attempts: 3[m
+[31m-  redundant_joints:[m
+[31m-    - back_lbz[m
+[31m-    - back_mby[m
+[31m-right_hand:[m
+[31m-  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin[m
+[31m-  kinematics_solver_search_resolution: 0.005[m
+[31m-  kinematics_solver_timeout: 0.005[m
+[31m-  kinematics_solver_attempts: 3[m
+[31m-left_hand:[m
+[31m-  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin[m
+[31m-  kinematics_solver_search_resolution: 0.005[m
+[31m-  kinematics_solver_timeout: 0.005[m
+[31m-  kinematics_solver_attempts: 3[m
+\ No newline at end of file[m
+[1mdiff --git a/iri_wam_moveit_config/scripts/modules/common.py b/iri_wam_moveit_config/scripts/modules/common.py[m
+[1mindex 74f2e72..54729df 100644[m
+[1m--- a/iri_wam_moveit_config/scripts/modules/common.py[m
+[1m+++ b/iri_wam_moveit_config/scripts/modules/common.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ [m
+ import sys [m
+ import csv [m
+[36m@@ -18,40 +18,40 @@[m [mDEBUG = True[m
+ def plan_and_move_in_joints(group, jm_request):[m
+   group.clear_pose_targets()[m
+   if DEBUG:[m
+[31m-    print "======= Current Joint values: %s" % group.get_current_joint_values()[m
+[31m-    print "======= Requested Joint values: %s" % jm_request.positions[m
+[32m+[m[32m    print("======= Current Joint values: %s" % group.get_current_joint_values())[m
+[32m+[m[32m    print("======= Requested Joint values: %s" % jm_request.positions)[m
+     sys.stdout.flush()[m
+   group.set_joint_value_target(jm_request.positions)[m
+   plan = group.plan()[m
+   if plan.joint_trajectory.points:[m
+[31m-    print "======= Executing trajectory plan..."[m
+[32m+[m[32m    print("======= Executing trajectory plan...")[m
+     sys.stdout.flush()[m
+     group.go(wait=True)[m
+     return True[m
+   else:[m
+[31m-    print "======= Planning NOT Possible"[m
+[32m+[m[32m    print("======= Planning NOT Possible")[m
+     sys.stdout.flush()[m
+     return False[m
+ [m
+ def plan_and_move_in_cartesians(group, pose_st):[m
+   group.clear_pose_targets()[m
+   if DEBUG:[m
+[31m-    print "======= From frame: %s" % group.get_planning_frame()[m
+[31m-    print "======= To frame: %s" % group.get_end_effector_link()[m
+[31m-  print "======= Generating plan"[m
+[32m+[m[32m    print("======= From frame: %s" % group.get_planning_frame())[m
+[32m+[m[32m    print("======= To frame: %s" % group.get_end_effector_link())[m
+[32m+[m[32m  print("======= Generating plan")[m
+   sys.stdout.flush()[m
+   group.set_pose_target(pose_st)[m
+   plan = group.plan()[m
+   if plan.joint_trajectory.points:[m
+[31m-    print "======= Executing plan"[m
+[32m+[m[32m    print("======= Executing plan")[m
+     sys.stdout.flush()[m
+     #group.go(wait=True)[m
+     group.execute(plan)[m
+     #wait_in_secs(2)[m
+[31m-    print "======= Plan Executed"[m
+[32m+[m[32m    print("======= Plan Executed")[m
+     return True[m
+   else:[m
+[31m-    print "======= Plan NOT Possible"[m
+[32m+[m[32m    print("======= Plan NOT Possible")[m
+     sys.stdout.flush()[m
+     return False[m
+ [m
+[1mdiff --git a/iri_wam_moveit_config/scripts/simple_moveit_example.py b/iri_wam_moveit_config/scripts/simple_moveit_example.py[m
+[1mindex fcbe47a..7e07ea8 100755[m
+[1m--- a/iri_wam_moveit_config/scripts/simple_moveit_example.py[m
+[1m+++ b/iri_wam_moveit_config/scripts/simple_moveit_example.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ #[m
+ # Usage:[m
+ # rosrun iri_wam_moveit_config simple_moveit_example.py[m
+[36m@@ -45,11 +45,11 @@[m [minitial_pose.acceleration = 0.5[m
+ [m
+ if __name__ == "__main__":[m
+ [m
+[31m-  print "======= Init Simple MoveIt Example"[m
+[32m+[m[32m  print("======= Init Simple MoveIt Example")[m
+   moveit_commander.roscpp_initialize(sys.argv)[m
+   rospy.init_node('iri_simple_moveit_example', anonymous=True)[m
+ [m
+[31m-  print "======= Connecting Node with MoveIt"[m
+[32m+[m[32m  print("======= Connecting Node with MoveIt")[m
+   sys.stdout.flush()[m
+   robot = moveit_commander.RobotCommander()[m
+   scene = moveit_commander.PlanningSceneInterface()[m
+[36m@@ -79,6 +79,6 @@[m [mif __name__ == "__main__":[m
+   # Go To Initial Pose[m
+   common.plan_and_move_in_joints(group, home_pose)[m
+ [m
+[31m-  print "======= THE END"[m
+[32m+[m[32m  print("======= THE END")[m
+   sys.stdout.flush()[m
+   moveit_commander.os._exit(0)[m
+[1mdiff --git a/r2_moveit_generated/launch/upload_r2.launch b/r2_moveit_generated/launch/upload_r2.launch[m
+[1mindex d67134a..80212d5 100644[m
+[1m--- a/r2_moveit_generated/launch/upload_r2.launch[m
+[1m+++ b/r2_moveit_generated/launch/upload_r2.launch[m
+[36m@@ -2,10 +2,10 @@[m
+     <arg name="kinect" default="true"/>[m
+     <!-- send r2 urdf to param server -->[m
+     <group if="$(arg kinect)">[m
+[31m-      <param name="robot_description" command="$(find xacro)/xacro.py '$(find r2_description)/robots/r2.urdf.xacro'" />[m
+[32m+[m[32m      <param name="robot_description" command="$(find xacro)/xacro '$(find r2_description)/robots/r2.urdf.xacro'" />[m
+     </group>[m
+     <group unless="$(arg kinect)">[m
+[31m-      <param name="robot_description" command="$(find xacro)/xacro.py '$(find r2_description)/robots/r2_no_kinect.urdf.xacro'" />[m
+[32m+[m[32m      <param name="robot_description" command="$(find xacro)/xacro '$(find r2_description)/robots/r2_no_kinect.urdf.xacro'" />[m
+     </group>[m
+ [m
+     <!-- the semantic description that corresponds to the URDF -->[m

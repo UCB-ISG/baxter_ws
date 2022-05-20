@@ -1,0 +1,460 @@
+ cfg/GripperActionServer.cfg                        |  2 [32m+[m[31m-[m
+ cfg/HeadActionServer.cfg                           |  2 [32m+[m[31m-[m
+ cfg/PositionFFJointTrajectoryActionServer.cfg      |  2 [32m+[m[31m-[m
+ cfg/PositionJointTrajectoryActionServer.cfg        |  2 [32m+[m[31m-[m
+ cfg/VelocityJointTrajectoryActionServer.cfg        |  2 [32m+[m[31m-[m
+ scripts/gripper_action_server.py                   |  2 [32m+[m[31m-[m
+ scripts/head_action_server.py                      |  2 [32m+[m[31m-[m
+ scripts/joint_trajectory_action_server.py          |  2 [32m+[m[31m-[m
+ setup.py                                           |  2 [32m+[m[31m-[m
+ src/baxter_dataflow/signals.py                     |  4 [32m+[m[31m-[m
+ src/baxter_dataflow/weakrefset.py                  |  2 [32m+[m[31m-[m
+ src/baxter_interface/analog_io.py                  |  2 [32m+[m[31m-[m
+ src/baxter_interface/camera.py                     |  2 [32m+[m[31m-[m
+ src/baxter_interface/gripper.py                    |  4 [32m+[m[31m-[m
+ src/baxter_interface/limb.py                       | 26 [32m++++++[m[31m------[m
+ src/baxter_interface/robot_enable.py               |  2 [32m+[m[31m-[m
+ src/baxter_interface/robust_controller.py          |  2 [32m+[m[31m-[m
+ src/joint_trajectory_action/bezier.py              |  8 [32m++[m[31m--[m
+ .../joint_trajectory_action.py                     | 48 [32m+++++++++++[m[31m-----------[m
+ 19 files changed, 59 insertions(+), 59 deletions(-)
+
+[1mdiff --git a/cfg/GripperActionServer.cfg b/cfg/GripperActionServer.cfg[m
+[1mindex cdc790e..f5424a6 100755[m
+[1m--- a/cfg/GripperActionServer.cfg[m
+[1m+++ b/cfg/GripperActionServer.cfg[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[1mdiff --git a/cfg/HeadActionServer.cfg b/cfg/HeadActionServer.cfg[m
+[1mindex 0cf31d6..4e19d5c 100755[m
+[1m--- a/cfg/HeadActionServer.cfg[m
+[1m+++ b/cfg/HeadActionServer.cfg[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[1mdiff --git a/cfg/PositionFFJointTrajectoryActionServer.cfg b/cfg/PositionFFJointTrajectoryActionServer.cfg[m
+[1mindex 285db27..ffca778 100755[m
+[1m--- a/cfg/PositionFFJointTrajectoryActionServer.cfg[m
+[1m+++ b/cfg/PositionFFJointTrajectoryActionServer.cfg[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[1mdiff --git a/cfg/PositionJointTrajectoryActionServer.cfg b/cfg/PositionJointTrajectoryActionServer.cfg[m
+[1mindex 7a13c60..aad283e 100755[m
+[1m--- a/cfg/PositionJointTrajectoryActionServer.cfg[m
+[1m+++ b/cfg/PositionJointTrajectoryActionServer.cfg[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[1mdiff --git a/cfg/VelocityJointTrajectoryActionServer.cfg b/cfg/VelocityJointTrajectoryActionServer.cfg[m
+[1mindex 13a67a3..9060f19 100755[m
+[1m--- a/cfg/VelocityJointTrajectoryActionServer.cfg[m
+[1m+++ b/cfg/VelocityJointTrajectoryActionServer.cfg[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[1mdiff --git a/scripts/gripper_action_server.py b/scripts/gripper_action_server.py[m
+[1mindex b10302e..196b55e 100755[m
+[1m--- a/scripts/gripper_action_server.py[m
+[1m+++ b/scripts/gripper_action_server.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[1mdiff --git a/scripts/head_action_server.py b/scripts/head_action_server.py[m
+[1mindex 02a209e..fa48e5f 100755[m
+[1m--- a/scripts/head_action_server.py[m
+[1m+++ b/scripts/head_action_server.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[1mdiff --git a/scripts/joint_trajectory_action_server.py b/scripts/joint_trajectory_action_server.py[m
+[1mindex d19b23b..4487fcb 100755[m
+[1m--- a/scripts/joint_trajectory_action_server.py[m
+[1m+++ b/scripts/joint_trajectory_action_server.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[1mdiff --git a/setup.py b/setup.py[m
+[1mindex 2820dac..13de6eb 100644[m
+[1m--- a/setup.py[m
+[1m+++ b/setup.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ from distutils.core import setup[m
+ from catkin_pkg.python_setup import generate_distutils_setup[m
+ [m
+[1mdiff --git a/src/baxter_dataflow/signals.py b/src/baxter_dataflow/signals.py[m
+[1mindex 4267357..cad2537 100644[m
+[1m--- a/src/baxter_dataflow/signals.py[m
+[1m+++ b/src/baxter_dataflow/signals.py[m
+[36m@@ -31,7 +31,7 @@[m [mfrom weakref import WeakKeyDictionary[m
+ try:[m
+     from weakref import WeakSet[m
+ except ImportError:[m
+[31m-    from weakrefset import WeakSet[m
+[32m+[m[32m    from .weakrefset import WeakSet[m
+ [m
+ [m
+ class Signal(object):[m
+[36m@@ -43,7 +43,7 @@[m [mclass Signal(object):[m
+         for f in self._functions:[m
+             f(*args, **kargs)[m
+ [m
+[31m-        for obj, functions in self._methods.items():[m
+[32m+[m[32m        for obj, functions in list(self._methods.items()):[m
+             for f in functions:[m
+                 f(obj, *args, **kargs)[m
+ [m
+[1mdiff --git a/src/baxter_dataflow/weakrefset.py b/src/baxter_dataflow/weakrefset.py[m
+[1mindex 6ab9c0c..b093709 100644[m
+[1m--- a/src/baxter_dataflow/weakrefset.py[m
+[1m+++ b/src/baxter_dataflow/weakrefset.py[m
+[36m@@ -5,7 +5,7 @@[m
+ # http://www.voidspace.org.uk/python/license.shtml[m
+ # https://pypi.python.org/pypi/weakrefset[m
+ [m
+[31m-from __future__ import with_statement[m
+[32m+[m
+ [m
+ from _weakref import ref[m
+ [m
+[1mdiff --git a/src/baxter_interface/analog_io.py b/src/baxter_interface/analog_io.py[m
+[1mindex b1260ab..48fe906 100644[m
+[1m--- a/src/baxter_interface/analog_io.py[m
+[1m+++ b/src/baxter_interface/analog_io.py[m
+[36m@@ -69,7 +69,7 @@[m [mclass AnalogIO(object):[m
+             self._on_io_state)[m
+ [m
+         baxter_dataflow.wait_for([m
+[31m-            lambda: len(self._state.keys()) != 0,[m
+[32m+[m[32m            lambda: len(list(self._state.keys())) != 0,[m
+             timeout=2.0,[m
+             timeout_msg="Failed to get current analog_io state from %s" \[m
+             % (topic_base,),[m
+[1mdiff --git a/src/baxter_interface/camera.py b/src/baxter_interface/camera.py[m
+[1mindex ea2b57e..98db4f1 100644[m
+[1m--- a/src/baxter_interface/camera.py[m
+[1m+++ b/src/baxter_interface/camera.py[m
+[36m@@ -255,7 +255,7 @@[m [mclass CameraController(object):[m
+         x = self._get_value(CameraControl.CAMERA_CONTROL_WINDOW_X,[m
+                             self.CONTROL_AUTO)[m
+         if (x == self.CONTROL_AUTO):[m
+[31m-            return (tuple(map(lambda x: x / 2, self.resolution)) if[m
+[32m+[m[32m            return (tuple([x / 2 for x in self.resolution]) if[m
+             self.half_resolution else[m
+             self.resolution)[m
+         else:[m
+[1mdiff --git a/src/baxter_interface/gripper.py b/src/baxter_interface/gripper.py[m
+[1mindex 5f479a3..f0e8304 100644[m
+[1m--- a/src/baxter_interface/gripper.py[m
+[1m+++ b/src/baxter_interface/gripper.py[m
+[36m@@ -362,8 +362,8 @@[m [mclass Gripper(object):[m
+             self._parameters = valid_parameters[m
+         if parameters is None:[m
+             parameters = dict()[m
+[31m-        for key in parameters.keys():[m
+[31m-            if key in valid_parameters.keys():[m
+[32m+[m[32m        for key in list(parameters.keys()):[m
+[32m+[m[32m            if key in list(valid_parameters.keys()):[m
+                 self._parameters[key] = parameters[key][m
+             else:[m
+                 msg = ("Invalid parameter: %s provided. %s" %[m
+[1mdiff --git a/src/baxter_interface/limb.py b/src/baxter_interface/limb.py[m
+[1mindex 0201c3d..956f826 100644[m
+[1m--- a/src/baxter_interface/limb.py[m
+[1m+++ b/src/baxter_interface/limb.py[m
+[36m@@ -107,7 +107,7 @@[m [mclass Limb(object):[m
+             queue_size=1,[m
+             tcp_nodelay=True)[m
+ [m
+[31m-        joint_state_topic = 'robot/joint_states'[m
+[32m+[m[32m        joint_state_topic = '/robot/joint_states'[m
+         _joint_state_sub = rospy.Subscriber([m
+             joint_state_topic,[m
+             JointState,[m
+[36m@@ -117,11 +117,11 @@[m [mclass Limb(object):[m
+ [m
+         err_msg = ("%s limb init failed to get current joint_states "[m
+                    "from %s") % (self.name.capitalize(), joint_state_topic)[m
+[31m-        baxter_dataflow.wait_for(lambda: len(self._joint_angle.keys()) > 0,[m
+[32m+[m[32m        baxter_dataflow.wait_for(lambda: len(list(self._joint_angle.keys())) > 0,[m
+                                  timeout_msg=err_msg)[m
+         err_msg = ("%s limb init failed to get current endpoint_state "[m
+                    "from %s") % (self.name.capitalize(), ns + 'endpoint_state')[m
+[31m-        baxter_dataflow.wait_for(lambda: len(self._cartesian_pose.keys()) > 0,[m
+[32m+[m[32m        baxter_dataflow.wait_for(lambda: len(list(self._cartesian_pose.keys())) > 0,[m
+                                  timeout_msg=err_msg)[m
+ [m
+     def _on_joint_states(self, msg):[m
+[36m@@ -345,8 +345,8 @@[m [mclass Limb(object):[m
+         @type raw: bool[m
+         @param raw: advanced, direct position control mode[m
+         """[m
+[31m-        self._command_msg.names = positions.keys()[m
+[31m-        self._command_msg.command = positions.values()[m
+[32m+[m[32m        self._command_msg.names = list(positions.keys())[m
+[32m+[m[32m        self._command_msg.command = list(positions.values())[m
+         if raw:[m
+             self._command_msg.mode = JointCommand.RAW_POSITION_MODE[m
+         else:[m
+[36m@@ -365,8 +365,8 @@[m [mclass Limb(object):[m
+         @type velocities: dict({str:float})[m
+         @param velocities: joint_name:velocity command[m
+         """[m
+[31m-        self._command_msg.names = velocities.keys()[m
+[31m-        self._command_msg.command = velocities.values()[m
+[32m+[m[32m        self._command_msg.names = list(velocities.keys())[m
+[32m+[m[32m        self._command_msg.command = list(velocities.values())[m
+         self._command_msg.mode = JointCommand.VELOCITY_MODE[m
+         self._pub_joint_cmd.publish(self._command_msg)[m
+ [m
+[36m@@ -382,8 +382,8 @@[m [mclass Limb(object):[m
+         @type torques: dict({str:float})[m
+         @param torques: joint_name:torque command[m
+         """[m
+[31m-        self._command_msg.names = torques.keys()[m
+[31m-        self._command_msg.command = torques.values()[m
+[32m+[m[32m        self._command_msg.names = list(torques.keys())[m
+[32m+[m[32m        self._command_msg.command = list(torques.values())[m
+         self._command_msg.mode = JointCommand.TORQUE_MODE[m
+         self._pub_joint_cmd.publish(self._command_msg)[m
+ [m
+[36m@@ -398,8 +398,8 @@[m [mclass Limb(object):[m
+         @type timeout: float[m
+         @param timeout: seconds to wait for move to finish [15][m
+         """[m
+[31m-        angles = dict(zip(self.joint_names(),[m
+[31m-                          [0.0, -0.55, 0.0, 0.75, 0.0, 1.26, 0.0]))[m
+[32m+[m[32m        angles = dict(list(zip(self.joint_names(),[m
+[32m+[m[32m                          [0.0, -0.55, 0.0, 0.75, 0.0, 1.26, 0.0])))[m
+         return self.move_to_joint_positions(angles, timeout)[m
+ [m
+     def move_to_joint_positions(self, positions, timeout=15.0,[m
+[36m@@ -425,7 +425,7 @@[m [mclass Limb(object):[m
+ [m
+         def filtered_cmd():[m
+             # First Order Filter - 0.2 Hz Cutoff[m
+[31m-            for joint in positions.keys():[m
+[32m+[m[32m            for joint in list(positions.keys()):[m
+                 cmd[joint] = 0.012488 * positions[joint] + 0.98751 * cmd[joint][m
+             return cmd[m
+ [m
+[36m@@ -434,7 +434,7 @@[m [mclass Limb(object):[m
+                 return abs(angle - self._joint_angle[joint])[m
+             return joint_diff[m
+ [m
+[31m-        diffs = [genf(j, a) for j, a in positions.items() if[m
+[32m+[m[32m        diffs = [genf(j, a) for j, a in list(positions.items()) if[m
+                  j in self._joint_angle][m
+ [m
+         self.set_joint_positions(filtered_cmd())[m
+[1mdiff --git a/src/baxter_interface/robot_enable.py b/src/baxter_interface/robot_enable.py[m
+[1mindex 78bf45f..c12ef50 100644[m
+[1m--- a/src/baxter_interface/robot_enable.py[m
+[1m+++ b/src/baxter_interface/robot_enable.py[m
+[36m@@ -164,7 +164,7 @@[m [mhttp://sdk.rethinkrobotics.com/wiki/RSDK_Shell#Initialize[m
+                 timeout_msg=error_env,[m
+                 body=pub.publish[m
+             )[m
+[31m-        except OSError, e:[m
+[32m+[m[32m        except OSError as e:[m
+             if e.errno == errno.ETIMEDOUT:[m
+                 if self._state.error == True and self._state.stopped == False:[m
+                     rospy.logwarn(error_nonfatal)[m
+[1mdiff --git a/src/baxter_interface/robust_controller.py b/src/baxter_interface/robust_controller.py[m
+[1mindex 5845229..ddfb13f 100644[m
+[1m--- a/src/baxter_interface/robust_controller.py[m
+[1m+++ b/src/baxter_interface/robust_controller.py[m
+[36m@@ -38,7 +38,7 @@[m [mclass RobustController(object):[m
+     (STATE_IDLE,[m
+      STATE_STARTING,[m
+      STATE_RUNNING,[m
+[31m-     STATE_STOPPING) = range(4)[m
+[32m+[m[32m     STATE_STOPPING) = list(range(4))[m
+ [m
+     def __init__(self, namespace, enable_msg, disable_msg, timeout=60):[m
+         """[m
+[1mdiff --git a/src/joint_trajectory_action/bezier.py b/src/joint_trajectory_action/bezier.py[m
+[1mindex 37c2026..3120e07 100644[m
+[1m--- a/src/joint_trajectory_action/bezier.py[m
+[1m+++ b/src/joint_trajectory_action/bezier.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#! /usr/bin/python[m
+[32m+[m[32m#! /usr/bin/python3[m
+ # Software License Agreement (BSD License)[m
+ #[m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+[36m@@ -144,7 +144,7 @@[m [mdef de_boor_control_pts(points_array, d0=None,[m
+             else:[m
+                 x[N-2, 0] = 6*points_array[-2, col] - 1.5*dN[0, col][m
+                 x[0, 0] = 6*points_array[1, col] - 1.5*d0[0, col][m
+[31m-            x[range(1, N-3+1), 0] = 6*points_array[range(2, N-2+1), col][m
+[32m+[m[32m            x[list(range(1, N-3+1)), 0] = 6*points_array[list(range(2, N-2+1)), col][m
+             # Solve bezier interpolation[m
+             d_pts[2:N+1, col] = np.linalg.solve(A, x).T[m
+         else:[m
+[36m@@ -298,7 +298,7 @@[m [mdef bezier_point(b_coeffs, b_index, t):[m
+     else:[m
+         t = 0.0 if t < 0.0 else t[m
+         t = 1.0 if t > 1.0 else t[m
+[31m-        b_coeff_set = b_coeffs[:, b_index-1, range(4)][m
+[32m+[m[32m        b_coeff_set = b_coeffs[:, b_index-1, list(range(4))][m
+         b_point = _cubic_spline_point(b_coeff_set, t)[m
+     return b_point[m
+ [m
+[36m@@ -332,7 +332,7 @@[m [mdef bezier_curve(b_coeffs, num_intervals):[m
+     # Copy out initial point[m
+     b_curve[0, :] = b_coeffs[:, 0, 0][m
+     for current_bpt in range(num_bpts):[m
+[31m-            b_coeff_set = b_coeffs[:, current_bpt, range(4)][m
+[32m+[m[32m            b_coeff_set = b_coeffs[:, current_bpt, list(range(4))][m
+             for iteration, t in enumerate(np.linspace(interval, 1,[m
+                                                       num_intervals)):[m
+                 b_curve[(current_bpt *[m
+[1mdiff --git a/src/joint_trajectory_action/joint_trajectory_action.py b/src/joint_trajectory_action/joint_trajectory_action.py[m
+[1mindex 99b2171..cd2ab4d 100644[m
+[1m--- a/src/joint_trajectory_action/joint_trajectory_action.py[m
+[1m+++ b/src/joint_trajectory_action/joint_trajectory_action.py[m
+[36m@@ -34,7 +34,7 @@[m [mimport math[m
+ import operator[m
+ import numpy as np[m
+ [m
+[31m-import bezier[m
+[32m+[m[32mfrom . import bezier[m
+ [m
+ import rospy[m
+ [m
+[36m@@ -191,8 +191,8 @@[m [mclass JointTrajectoryActionServer(object):[m
+ [m
+     def _get_current_error(self, joint_names, set_point):[m
+         current = self._get_current_position(joint_names)[m
+[31m-        error = map(operator.sub, set_point, current)[m
+[31m-        return zip(joint_names, error)[m
+[32m+[m[32m        error = list(map(operator.sub, set_point, current))[m
+[32m+[m[32m        return list(zip(joint_names, error))[m
+ [m
+     def _update_feedback(self, cmd_point, jnt_names, cur_time):[m
+         self._fdbk.header.stamp = rospy.Duration.from_sec(rospy.get_time())[m
+[36m@@ -201,34 +201,34 @@[m [mclass JointTrajectoryActionServer(object):[m
+         self._fdbk.desired.time_from_start = rospy.Duration.from_sec(cur_time)[m
+         self._fdbk.actual.positions = self._get_current_position(jnt_names)[m
+         self._fdbk.actual.time_from_start = rospy.Duration.from_sec(cur_time)[m
+[31m-        self._fdbk.error.positions = map(operator.sub,[m
+[32m+[m[32m        self._fdbk.error.positions = list(map(operator.sub,[m
+                                          self._fdbk.desired.positions,[m
+                                          self._fdbk.actual.positions[m
+[31m-                                        )[m
+[32m+[m[32m                                        ))[m
+         self._fdbk.error.time_from_start = rospy.Duration.from_sec(cur_time)[m
+         self._server.publish_feedback(self._fdbk)[m
+ [m
+     def _reorder_joints_ff_cmd(self, joint_names, point):[m
+[31m-	joint_name_order = self._limb.joint_names()[m
+[31m-	pnt = JointTrajectoryPoint()[m
+[31m-	pnt.time_from_start = point.time_from_start[m
+[31m-	pos_cmd = dict(zip(joint_names, point.positions))[m
+[31m-	for jnt_name in joint_name_order:[m
+[31m-	    pnt.positions.append(pos_cmd[jnt_name])[m
+[32m+[m[32m        joint_name_order = self._limb.joint_names()[m
+[32m+[m[32m        pnt = JointTrajectoryPoint()[m
+[32m+[m[32m        pnt.time_from_start = point.time_from_start[m
+[32m+[m[32m        pos_cmd = dict(list(zip(joint_names, point.positions)))[m
+[32m+[m[32m        for jnt_name in joint_name_order:[m
+[32m+[m[32m            pnt.positions.append(pos_cmd[jnt_name])[m
+         if point.velocities:[m
+[31m-	    vel_cmd = dict(zip(joint_names, point.velocities))[m
+[31m-	    for jnt_name in joint_name_order:[m
+[31m-	        pnt.velocities.append(vel_cmd[jnt_name])[m
+[32m+[m[32m            vel_cmd = dict(list(zip(joint_names, point.velocities)))[m
+[32m+[m[32m            for jnt_name in joint_name_order:[m
+[32m+[m[32m                pnt.velocities.append(vel_cmd[jnt_name])[m
+         if point.accelerations:[m
+[31m-	    accel_cmd = dict(zip(joint_names, point.accelerations))[m
+[31m-	    for jnt_name in joint_name_order:[m
+[31m-	        pnt.accelerations.append(accel_cmd[jnt_name])[m
+[32m+[m[32m            accel_cmd = dict(list(zip(joint_names, point.accelerations)))[m
+[32m+[m[32m            for jnt_name in joint_name_order:[m
+[32m+[m[32m                pnt.accelerations.append(accel_cmd[jnt_name])[m
+         return pnt[m
+ [m
+     def _command_stop(self, joint_names, joint_angles, start_time, dimensions_dict):[m
+         if self._mode == 'velocity':[m
+             velocities = [0.0] * len(joint_names)[m
+[31m-            cmd = dict(zip(joint_names, velocities))[m
+[32m+[m[32m            cmd = dict(list(zip(joint_names, velocities)))[m
+             while (not self._server.is_new_goal_available() and self._alive[m
+                    and self.robot_is_enabled()):[m
+                 self._limb.set_joint_velocities(cmd)[m
+[36m@@ -279,14 +279,14 @@[m [mclass JointTrajectoryActionServer(object):[m
+                 velocities.append(self._pid[delta[0]].compute_output(delta[1]))[m
+         if ((self._mode == 'position' or self._mode == 'position_w_id')[m
+               and self._alive):[m
+[31m-            cmd = dict(zip(joint_names, point.positions))[m
+[32m+[m[32m            cmd = dict(list(zip(joint_names, point.positions)))[m
+             raw_pos_mode = (self._mode == 'position_w_id')[m
+             self._limb.set_joint_positions(cmd, raw=raw_pos_mode)[m
+             if raw_pos_mode:[m
+                 ff_pnt = self._reorder_joints_ff_cmd(joint_names, point)[m
+                 self._pub_ff_cmd.publish(ff_pnt)[m
+         elif self._alive:[m
+[31m-            cmd = dict(zip(joint_names, velocities))[m
+[32m+[m[32m            cmd = dict(list(zip(joint_names, velocities)))[m
+             self._limb.set_joint_velocities(cmd)[m
+         return True[m
+ [m
+[36m@@ -318,7 +318,7 @@[m [mclass JointTrajectoryActionServer(object):[m
+         num_traj_dim = sum(dimensions_dict.values())[m
+         num_b_values = len(['b0', 'b1', 'b2', 'b3'])[m
+         b_matrix = np.zeros(shape=(num_joints, num_traj_dim, num_traj_pts-1, num_b_values))[m
+[31m-        for jnt in xrange(num_joints):[m
+[32m+[m[32m        for jnt in range(num_joints):[m
+             traj_array = np.zeros(shape=(len(trajectory_points), num_traj_dim))[m
+             for idx, point in enumerate(trajectory_points):[m
+                 current_point = list()[m
+[36m@@ -429,9 +429,9 @@[m [mclass JointTrajectoryActionServer(object):[m
+                 cmd_time = 0[m
+                 t = 0[m
+ [m
+[31m-	    point = self._get_bezier_point(b_matrix, idx,[m
+[32m+[m[32m            point = self._get_bezier_point(b_matrix, idx,[m
+                                            t, cmd_time,[m
+[31m-				           dimensions_dict)[m
+[32m+[m[32m                                           dimensions_dict)[m
+ [m
+             # Command Joint Position, Velocity, Acceleration[m
+             command_executed = self._command_joints(joint_names, point, start_time, dimensions_dict)[m
+[36m@@ -443,7 +443,7 @@[m [mclass JointTrajectoryActionServer(object):[m
+         # Keep trying to meet goal until goal_time constraint expired[m
+         last = trajectory_points[-1][m
+         last_time = trajectory_points[-1].time_from_start.to_sec()[m
+[31m-        end_angles = dict(zip(joint_names, last.positions))[m
+[32m+[m[32m        end_angles = dict(list(zip(joint_names, last.positions)))[m
+ [m
+         def check_goal_state():[m
+             for error in self._get_current_error(joint_names, last.positions):[m

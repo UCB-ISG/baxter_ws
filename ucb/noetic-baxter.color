@@ -1,0 +1,38 @@
+ baxter_sdk.rosinstall | 20 [32m++++++++++[m[31m----------[m
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+[1mdiff --git a/baxter_sdk.rosinstall b/baxter_sdk.rosinstall[m
+[1mindex 751b783..22d7ef1 100644[m
+[1m--- a/baxter_sdk.rosinstall[m
+[1m+++ b/baxter_sdk.rosinstall[m
+[36m@@ -1,20 +1,20 @@[m
+ - git:[m
+     local-name: baxter[m
+[31m-    uri: https://github.com/RethinkRobotics/baxter.git[m
+[31m-    version: release-1.2.0[m
+[32m+[m[32m    uri: https://github.com/UCB-ISG/baxter.git[m
+[32m+[m[32m    version: ucb-noetic-devel[m
+ - git:[m
+     local-name: baxter_interface[m
+[31m-    uri: https://github.com/RethinkRobotics/baxter_interface.git[m
+[31m-    version: release-1.2.0[m
+[32m+[m[32m    uri: https://github.com/UCB-ISG/baxter_interface.git[m
+[32m+[m[32m    version: ucb-noetic-devel[m
+ - git:[m
+     local-name: baxter_tools[m
+[31m-    uri: https://github.com/RethinkRobotics/baxter_tools.git[m
+[31m-    version: release-1.2.0[m
+[32m+[m[32m    uri: https://github.com/UCB-ISG/baxter_tools.git[m
+[32m+[m[32m    version: ucb-noetic-devel[m
+ - git:[m
+     local-name: baxter_common[m
+[31m-    uri: https://github.com/RethinkRobotics/baxter_common.git[m
+[31m-    version: release-1.2.0[m
+[32m+[m[32m    uri: https://github.com/UCB-ISG/baxter_common.git[m
+[32m+[m[32m    version: ucb-noetic-devel[m
+ - git:[m
+     local-name: baxter_examples[m
+[31m-    uri: https://github.com/RethinkRobotics/baxter_examples.git[m
+[31m-    version: release-1.2.0[m
+[32m+[m[32m    uri: https://github.com/UCB-ISG/baxter_examples.git[m
+[32m+[m[32m    version: ucb-noetic-devel[m

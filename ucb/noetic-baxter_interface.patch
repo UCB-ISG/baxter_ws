@@ -1,3 +1,24 @@
+ cfg/GripperActionServer.cfg                        |  2 +-
+ cfg/HeadActionServer.cfg                           |  2 +-
+ cfg/PositionFFJointTrajectoryActionServer.cfg      |  2 +-
+ cfg/PositionJointTrajectoryActionServer.cfg        |  2 +-
+ cfg/VelocityJointTrajectoryActionServer.cfg        |  2 +-
+ scripts/gripper_action_server.py                   |  2 +-
+ scripts/head_action_server.py                      |  2 +-
+ scripts/joint_trajectory_action_server.py          |  2 +-
+ setup.py                                           |  2 +-
+ src/baxter_dataflow/signals.py                     |  4 +-
+ src/baxter_dataflow/weakrefset.py                  |  2 +-
+ src/baxter_interface/analog_io.py                  |  2 +-
+ src/baxter_interface/camera.py                     |  2 +-
+ src/baxter_interface/gripper.py                    |  4 +-
+ src/baxter_interface/limb.py                       | 26 ++++++------
+ src/baxter_interface/robot_enable.py               |  2 +-
+ src/baxter_interface/robust_controller.py          |  2 +-
+ src/joint_trajectory_action/bezier.py              |  8 ++--
+ .../joint_trajectory_action.py                     | 48 +++++++++++-----------
+ 19 files changed, 59 insertions(+), 59 deletions(-)
+
 diff --git a/cfg/GripperActionServer.cfg b/cfg/GripperActionServer.cfg
 index cdc790e..f5424a6 100755
 --- a/cfg/GripperActionServer.cfg

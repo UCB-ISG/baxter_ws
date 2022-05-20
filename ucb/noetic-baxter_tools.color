@@ -1,0 +1,652 @@
+ CMakeLists.txt                 | 19 [32m+++++++[m[31m--[m
+ scripts/calibrate_arm.py       |  4 [32m+[m[31m-[m
+ scripts/camera_control.py      |  8 [32m++[m[31m--[m
+ scripts/enable_robot.py        |  6 [32m+[m[31m--[m
+ scripts/smoke_test.py          |  8 [32m++[m[31m--[m
+ scripts/tare.py                |  4 [32m+[m[31m-[m
+ scripts/tuck_arms.py           | 28 [32m++++++[m[31m------[m
+ scripts/update_robot.py        | 32 [32m+++++++[m[31m-------[m
+ setup.py                       |  2 [32m+[m[31m-[m
+ src/baxter_tools/smoketests.py | 96 [32m+++++++++++++++++++++[m[31m---------------------[m
+ 10 files changed, 109 insertions(+), 98 deletions(-)
+
+[1mdiff --git a/CMakeLists.txt b/CMakeLists.txt[m
+[1mindex 2e4be64..a043f10 100644[m
+[1m--- a/CMakeLists.txt[m
+[1m+++ b/CMakeLists.txt[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-cmake_minimum_required(VERSION 2.8.3)[m
+[32m+[m[32mcmake_minimum_required(VERSION 3.0.5)[m
+ project(baxter_tools)[m
+ [m
+ find_package(catkin[m
+[36m@@ -26,12 +26,23 @@[m [mcatkin_package([m
+   baxter_maintenance_msgs[m
+ )[m
+ [m
+[31m-install([m
+[31m-  DIRECTORY scripts/[m
+[32m+[m[32mcatkin_install_python(PROGRAMS[m
+[32m+[m[32m  scripts/calibrate_arm.py[m
+[32m+[m[32m  scripts/camera_control.py[m
+[32m+[m[32m  scripts/enable_robot.py[m
+[32m+[m[32m  scripts/smoke_test.py[m
+[32m+[m[32m  scripts/tare.py[m
+[32m+[m[32m  scripts/tuck_arms.py[m
+[32m+[m[32m  scripts/update_robot.py[m
+   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}[m
+[31m-  USE_SOURCE_PERMISSIONS[m
+ )[m
+ [m
+[32m+[m[32m# install([m
+[32m+[m[32m#   DIRECTORY scripts/[m
+[32m+[m[32m#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}[m
+[32m+[m[32m#   USE_SOURCE_PERMISSIONS[m
+[32m+[m[32m# )[m
+[32m+[m
+ install([m
+   DIRECTORY share/[m
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/share[m
+[1mdiff --git a/scripts/calibrate_arm.py b/scripts/calibrate_arm.py[m
+[1mindex d5257c6..b7c845e 100755[m
+[1m--- a/scripts/calibrate_arm.py[m
+[1m+++ b/scripts/calibrate_arm.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/python2[m
+[32m+[m[32m#!/usr/bin/python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[36m@@ -101,7 +101,7 @@[m [mdef main():[m
+     error = None[m
+     try:[m
+         cat.run()[m
+[31m-    except Exception, e:[m
+[32m+[m[32m    except Exception as e:[m
+         error = e.strerror[m
+     finally:[m
+         try:[m
+[1mdiff --git a/scripts/camera_control.py b/scripts/camera_control.py[m
+[1mindex f69d6e3..c1ee683 100755[m
+[1m--- a/scripts/camera_control.py[m
+[1m+++ b/scripts/camera_control.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/python2[m
+[32m+[m[32m#!/usr/bin/python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[36m@@ -64,7 +64,7 @@[m [mdef list_cameras(*_args, **_kwds):[m
+         for cam in resp.cameras:[m
+             print("%s%s" % (cam, ("  -  (open)" if open_cams[cam] else "")))[m
+     else:[m
+[31m-        print ('No cameras found')[m
+[32m+[m[32m        print('No cameras found')[m
+ [m
+ [m
+ def reset_cameras(*_args, **_kwds):[m
+[36m@@ -134,12 +134,12 @@[m [mdef main():[m
+         camera = args.open[m
+         lres = args.resolution.split('x')[m
+         if len(lres) != 2:[m
+[31m-            print fmt_res % tuple(str_res)[m
+[32m+[m[32m            print(fmt_res % tuple(str_res))[m
+             parser.error("Invalid resolution format: %s. Use (X)x(Y).")[m
+         res = (int(lres[0]), int(lres[1]))[m
+         if not any((res[0] == r[0] and res[1] == r[1])[m
+                    for r in CameraController.MODES):[m
+[31m-            print fmt_res % tuple(str_res)[m
+[32m+[m[32m            print(fmt_res % tuple(str_res))[m
+             parser.error("Invalid resolution provided.")[m
+     elif args.close:[m
+         action = close_camera[m
+[1mdiff --git a/scripts/enable_robot.py b/scripts/enable_robot.py[m
+[1mindex 3d73156..92d08ce 100755[m
+[1m--- a/scripts/enable_robot.py[m
+[1m+++ b/scripts/enable_robot.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/python2[m
+[32m+[m[32m#!/usr/bin/python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[36m@@ -67,7 +67,7 @@[m [mdef main():[m
+     try:[m
+         for act in args.actions:[m
+             if act == 'state':[m
+[31m-                print rs.state()[m
+[32m+[m[32m                print(rs.state())[m
+             elif act == 'enable':[m
+                 rs.enable()[m
+             elif act == 'disable':[m
+[36m@@ -76,7 +76,7 @@[m [mdef main():[m
+                 rs.reset()[m
+             elif act == 'stop':[m
+                 rs.stop()[m
+[31m-    except Exception, e:[m
+[32m+[m[32m    except Exception as e:[m
+         rospy.logerr(e.strerror)[m
+ [m
+     return 0[m
+[1mdiff --git a/scripts/smoke_test.py b/scripts/smoke_test.py[m
+[1mindex 02afdca..f3d0477 100755[m
+[1m--- a/scripts/smoke_test.py[m
+[1m+++ b/scripts/smoke_test.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[36m@@ -132,13 +132,13 @@[m [mdef main():[m
+         }[m
+ [m
+     test_dict['version'] = get_version()[m
+[31m-    if not test_dict['version'] in test_dict['valid_tests'].keys():[m
+[32m+[m[32m    if not test_dict['version'] in list(test_dict['valid_tests'].keys()):[m
+         print("Exiting: No tests specified for your software version: %s" %[m
+             (test_dict['version']))[m
+         return 1[m
+ [m
+     try:[m
+[31m-        raw_input("Press <Enter> to Begin Smoke Test\n")[m
+[32m+[m[32m        input("Press <Enter> to Begin Smoke Test\n")[m
+     except Exception:[m
+         print("\nExiting.")[m
+         return 1[m
+[36m@@ -150,7 +150,7 @@[m [mdef main():[m
+                  cur_time.tm_year, test_dict['version'],)[m
+                 )[m
+     if args.test == None:[m
+[31m-        print 'Performing All Tests'[m
+[32m+[m[32m        print('Performing All Tests')[m
+         ros_init()[m
+         for t in test_dict['valid_tests'][test_dict['version']]:[m
+             run_test(t, filename, args.proceed)[m
+[1mdiff --git a/scripts/tare.py b/scripts/tare.py[m
+[1mindex b230ccf..d90577d 100755[m
+[1m--- a/scripts/tare.py[m
+[1m+++ b/scripts/tare.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/python2[m
+[32m+[m[32m#!/usr/bin/python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[36m@@ -102,7 +102,7 @@[m [mdef main():[m
+     error = None[m
+     try:[m
+         tt.run()[m
+[31m-    except Exception, e:[m
+[32m+[m[32m    except Exception as e:[m
+         error = e.strerror[m
+     finally:[m
+         try:[m
+[1mdiff --git a/scripts/tuck_arms.py b/scripts/tuck_arms.py[m
+[1mindex f123f8c..a1476d6 100755[m
+[1m--- a/scripts/tuck_arms.py[m
+[1m+++ b/scripts/tuck_arms.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[36m@@ -77,11 +77,11 @@[m [mclass Tuck(object):[m
+                        }[m
+             }[m
+         self._collide_lsub = rospy.Subscriber([m
+[31m-                             'robot/limb/left/collision_avoidance_state',[m
+[32m+[m[32m                             '/robot/limb/left/collision_avoidance_state',[m
+                              CollisionAvoidanceState,[m
+                              self._update_collision, 'left')[m
+         self._collide_rsub = rospy.Subscriber([m
+[31m-                             'robot/limb/right/collision_avoidance_state',[m
+[32m+[m[32m                             '/robot/limb/right/collision_avoidance_state',[m
+                              CollisionAvoidanceState,[m
+                              self._update_collision, 'right')[m
+         self._disable_pub = {[m
+[36m@@ -113,10 +113,10 @@[m [mclass Tuck(object):[m
+                       for joint in self._arms[limb].joint_names()][m
+ [m
+             # Check if in a goal position[m
+[31m-            untuck_goal = map(diff_check, angles,[m
+[31m-                              self._joint_moves['untuck'][limb])[m
+[31m-            tuck_goal = map(diff_check, angles[0:2],[m
+[31m-                            self._joint_moves['tuck'][limb][0:2])[m
+[32m+[m[32m            untuck_goal = list(map(diff_check, angles,[m
+[32m+[m[32m                              self._joint_moves['untuck'][limb]))[m
+[32m+[m[32m            tuck_goal = list(map(diff_check, angles[0:2],[m
+[32m+[m[32m                            self._joint_moves['tuck'][limb][0:2]))[m
+             if all(untuck_goal):[m
+                 self._arm_state['tuck'][limb] = 'untuck'[m
+             elif all(tuck_goal):[m
+[36m@@ -139,7 +139,7 @@[m [mclass Tuck(object):[m
+         rospy.loginfo("Moving head to neutral position")[m
+         while not at_goal() and not rospy.is_shutdown():[m
+             if start_disabled:[m
+[31m-                [pub.publish(Empty()) for pub in self._disable_pub.values()][m
+[32m+[m[32m                [pub.publish(Empty()) for pub in list(self._disable_pub.values())][m
+             if not self._rs.state().enabled:[m
+                 self._enable_pub.publish(True)[m
+             head.set_pan(0.0, 0.5, timeout=0)[m
+[36m@@ -147,15 +147,15 @@[m [mclass Tuck(object):[m
+ [m
+         if start_disabled:[m
+             while self._rs.state().enabled == True and not rospy.is_shutdown():[m
+[31m-                [pub.publish(Empty()) for pub in self._disable_pub.values()][m
+[32m+[m[32m                [pub.publish(Empty()) for pub in list(self._disable_pub.values())][m
+                 self._enable_pub.publish(False)[m
+                 self._tuck_rate.sleep()[m
+ [m
+     def _move_to(self, tuck, disabled):[m
+         if any(disabled.values()):[m
+[31m-            [pub.publish(Empty()) for pub in self._disable_pub.values()][m
+[32m+[m[32m            [pub.publish(Empty()) for pub in list(self._disable_pub.values())][m
+         while (any(self._arm_state['tuck'][limb] != goal[m
+[31m-                   for limb, goal in tuck.viewitems())[m
+[32m+[m[32m                   for limb, goal in tuck.items())[m
+                and not rospy.is_shutdown()):[m
+             if self._rs.state().enabled == False:[m
+                 self._enable_pub.publish(True)[m
+[36m@@ -163,9 +163,9 @@[m [mclass Tuck(object):[m
+                 if disabled[limb]:[m
+                     self._disable_pub[limb].publish(Empty())[m
+                 if limb in tuck:[m
+[31m-                    self._arms[limb].set_joint_positions(dict(zip([m
+[32m+[m[32m                    self._arms[limb].set_joint_positions(dict(list(zip([m
+                                       self._arms[limb].joint_names(),[m
+[31m-                                      self._joint_moves[tuck[limb]][limb])))[m
+[32m+[m[32m                                      self._joint_moves[tuck[limb]][limb]))))[m
+             self._check_arm_state()[m
+             self._tuck_rate.sleep()[m
+ [m
+[36m@@ -239,7 +239,7 @@[m [mclass Tuck(object):[m
+             rospy.logwarn('Aborting: Shutting down safely...')[m
+         if any(self._arm_state['collide'].values()):[m
+             while self._rs.state().enabled != False:[m
+[31m-                [pub.publish(Empty()) for pub in self._disable_pub.values()][m
+[32m+[m[32m                [pub.publish(Empty()) for pub in list(self._disable_pub.values())][m
+                 self._enable_pub.publish(False)[m
+                 self._tuck_rate.sleep()[m
+ [m
+[1mdiff --git a/scripts/update_robot.py b/scripts/update_robot.py[m
+[1mindex 70c1cac..fdf230e 100755[m
+[1m--- a/scripts/update_robot.py[m
+[1m+++ b/scripts/update_robot.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/python2[m
+[32m+[m[32m#!/usr/bin/python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[36m@@ -138,23 +138,23 @@[m [mdef run_update(updater, uuid):[m
+         if msg.status == UpdateStatus.STS_IDLE:[m
+             nl.done = True[m
+         elif msg.status == UpdateStatus.STS_INVALID:[m
+[31m-            print ("Invalid update uuid, '%s'." % (uuid,))[m
+[32m+[m[32m            print("Invalid update uuid, '%s'." % (uuid,))[m
+             nl.done = True[m
+         elif msg.status == UpdateStatus.STS_BUSY:[m
+[31m-            print ("Update already in progress (may be shutting down).")[m
+[32m+[m[32m            print("Update already in progress (may be shutting down).")[m
+             nl.done = True[m
+         elif msg.status == UpdateStatus.STS_CANCELLED:[m
+[31m-            print ("Update cancelled.")[m
+[32m+[m[32m            print("Update cancelled.")[m
+             nl.done = True[m
+         elif msg.status == UpdateStatus.STS_ERR:[m
+[31m-            print ("Update failed: %s." % (msg.long_description,))[m
+[32m+[m[32m            print("Update failed: %s." % (msg.long_description,))[m
+             nl.done = True[m
+             nl.rc = 1[m
+         elif msg.status == UpdateStatus.STS_LOAD_KEXEC:[m
+[31m-            print ("Robot will now reboot to finish updating...")[m
+[32m+[m[32m            print("Robot will now reboot to finish updating...")[m
+             nl.rc = 0[m
+         else:[m
+[31m-            print ("Updater:  %s" % (msg.long_description))[m
+[32m+[m[32m            print("Updater:  %s" % (msg.long_description))[m
+ [m
+     def on_shutdown():[m
+         updater.stop_update()[m
+[36m@@ -164,9 +164,9 @@[m [mdef run_update(updater, uuid):[m
+ [m
+     try:[m
+         updater.command_update(uuid)[m
+[31m-    except OSError, e:[m
+[32m+[m[32m    except OSError as e:[m
+         if e.errno == errno.EINVAL:[m
+[31m-            print e.strerror[m
+[32m+[m[32m            print(e.strerror)[m
+             return 1[m
+         raise[m
+ [m
+[36m@@ -176,9 +176,9 @@[m [mdef run_update(updater, uuid):[m
+             timeout=5 * 60,[m
+             timeout_msg="Timeout waiting for update to succeed"[m
+         )[m
+[31m-    except Exception, e:[m
+[32m+[m[32m    except Exception as e:[m
+         if not (hasattr(e, 'errno') and e.errno == errno.ESHUTDOWN):[m
+[31m-            print e.strerror[m
+[32m+[m[32m            print(e.strerror)[m
+         nl.rc = 1[m
+ [m
+     return nl.rc[m
+[36m@@ -258,21 +258,21 @@[m [mdef main():[m
+     if cmd == 'list':[m
+         updates = updater.list()[m
+         if not len(updates):[m
+[31m-            print ("No available updates")[m
+[32m+[m[32m            print("No available updates")[m
+         else:[m
+[31m-            print ("%-30s%s" % ("Version", "UUID"))[m
+[32m+[m[32m            print("%-30s%s" % ("Version", "UUID"))[m
+             for update in updates:[m
+                 print("%-30s%s" % (update[0], update[1]))[m
+         return 0[m
+     elif cmd == 'update':[m
+         if uuid == '':[m
+[31m-            print "Error:  no update uuid specified"[m
+[32m+[m[32m            print("Error:  no update uuid specified")[m
+             return 1[m
+         msg = ("NOTE: Please plug in any Rethink Electric Parallel Grippers\n"[m
+                "      into the robot now, so that the Gripper Firmware\n"[m
+                "      can be automatically upgraded with the robot.\n")[m
+[31m-        print (msg)[m
+[31m-        raw_input("Press <Enter> to Continue...")[m
+[32m+[m[32m        print(msg)[m
+[32m+[m[32m        input("Press <Enter> to Continue...")[m
+         if rospy.is_shutdown():[m
+             return 0[m
+         return run_update(updater, uuid)[m
+[1mdiff --git a/setup.py b/setup.py[m
+[1mindex 6b57a09..edbc4f0 100644[m
+[1m--- a/setup.py[m
+[1m+++ b/setup.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ from distutils.core import setup[m
+ from catkin_pkg.python_setup import generate_distutils_setup[m
+ [m
+[1mdiff --git a/src/baxter_tools/smoketests.py b/src/baxter_tools/smoketests.py[m
+[1mindex ae4f0be..8b7e5e4 100644[m
+[1m--- a/src/baxter_tools/smoketests.py[m
+[1m+++ b/src/baxter_tools/smoketests.py[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-#!/usr/bin/env python[m
+[32m+[m[32m#!/usr/bin/env python3[m
+ [m
+ # Copyright (c) 2013-2015, Rethink Robotics[m
+ # All rights reserved.[m
+[36m@@ -33,7 +33,7 @@[m [mBaxter RSDK Smoke Tests[m
+ [m
+ import traceback[m
+ import threading[m
+[31m-import Queue[m
+[32m+[m[32mimport queue[m
+ [m
+ import rospy[m
+ [m
+[36m@@ -100,8 +100,8 @@[m [mclass SmokeTest(object):[m
+                 testlog.write("%s\n%s%s\n" %[m
+                     ('*' * 40, self.result[1], '*' * 40,)[m
+                     )[m
+[31m-        print "Results of %s saved to file: %s" % (self._name, filename,)[m
+[31m-        print ("------- Result: %s -------\n\n" %[m
+[32m+[m[32m        print("Results of %s saved to file: %s" % (self._name, filename,))[m
+[32m+[m[32m        print("------- Result: %s -------\n\n" %[m
+                ("Success" if self.result[0] else "Failure",))[m
+ [m
+     def return_failure(self, trace):[m
+[36m@@ -126,13 +126,13 @@[m [mclass Enable(SmokeTest):[m
+         """Runs Enable Smoke Test[m
+         """[m
+         try:[m
+[31m-            print "Test: Enable - Zero G for 10 Seconds"[m
+[32m+[m[32m            print("Test: Enable - Zero G for 10 Seconds")[m
+             self._rs.enable()[m
+             # Allow User Zero G Testing[m
+             rospy.sleep(10.0)[m
+[31m-            print "Test: State"[m
+[31m-            print self._rs.state()[m
+[31m-            print "Test: Disable"[m
+[32m+[m[32m            print("Test: State")[m
+[32m+[m[32m            print(self._rs.state())[m
+[32m+[m[32m            print("Test: Disable")[m
+             self._rs.disable()[m
+             self.result[0] = True[m
+         except Exception:[m
+[36m@@ -152,10 +152,10 @@[m [mclass Messages(SmokeTest):[m
+         """[m
+         try:[m
+             msg = 'robot/joint_states'[m
+[31m-            print "Test: Subscribe to topic: /%s" % msg[m
+[32m+[m[32m            print("Test: Subscribe to topic: /%s" % msg)[m
+             rospy.wait_for_message(msg, JointState, 5.0)[m
+             msg = 'robot/analog_io_states'[m
+[31m-            print "Test: Subscribe to topic: /%s" % msg[m
+[32m+[m[32m            print("Test: Subscribe to topic: /%s" % msg)[m
+             rospy.wait_for_message([m
+                 msg,[m
+                 AnalogIOStates,[m
+[36m@@ -178,9 +178,9 @@[m [mclass Services(SmokeTest):[m
+         """[m
+         try:[m
+             srv = '/ExternalTools/left/PositionKinematicsNode/IKService'[m
+[31m-            print "Test: Service availability: %s" % srv[m
+[32m+[m[32m            print("Test: Service availability: %s" % srv)[m
+             rospy.wait_for_service(srv, 5.0)[m
+[31m-            print "Test: IK service call Solve IK"[m
+[32m+[m[32m            print("Test: IK service call Solve IK")[m
+             iksvc = rospy.ServiceProxy(srv, SolvePositionIK)[m
+             ikreq = SolvePositionIKRequest()[m
+             pose = PoseStamped([m
+[36m@@ -219,19 +219,19 @@[m [mclass Head(SmokeTest):[m
+         Runs Head Smoke Test.[m
+         """[m
+         try:[m
+[31m-            print "Enabling robot..."[m
+[32m+[m[32m            print("Enabling robot...")[m
+             self._rs.enable()[m
+[31m-            print "Test: Moving Head to Neutral Location"[m
+[32m+[m[32m            print("Test: Moving Head to Neutral Location")[m
+             head = baxter_interface.Head()[m
+             head.set_pan(0.0, 0.05)[m
+[31m-            print "Test: Pan Head"[m
+[32m+[m[32m            print("Test: Pan Head")[m
+             head.set_pan(1.0, 0.05)[m
+             head.set_pan(-1.0, 0.05)[m
+             head.set_pan(0.0, 0.05)[m
+[31m-            print "Test: Nod Head"[m
+[31m-            for _ in xrange(3):[m
+[32m+[m[32m            print("Test: Nod Head")[m
+[32m+[m[32m            for _ in range(3):[m
+                 head.command_nod()[m
+[31m-            print "Test: Display Image on Screen - 5 seconds"[m
+[32m+[m[32m            print("Test: Display Image on Screen - 5 seconds")[m
+             image_path = (self._rp.get_path('baxter_tools') +[m
+                           '/share/images')[m
+             img = cv2.imread(image_path + '/baxterworking.png')[m
+[36m@@ -243,7 +243,7 @@[m [mclass Head(SmokeTest):[m
+             img = cv2.imread(image_path + '/researchsdk.png')[m
+             msg = cv_bridge.CvBridge().cv2_to_imgmsg(img)[m
+             pub.publish(msg)[m
+[31m-            print "Disabling robot..."[m
+[32m+[m[32m            print("Disabling robot...")[m
+             self._rs.disable()[m
+             self.result[0] = True[m
+         except Exception:[m
+[36m@@ -268,18 +268,18 @@[m [mclass MoveArms(SmokeTest):[m
+             try:[m
+                 limb.move_to_joint_positions(angle, timeout)[m
+                 queue.put(None)[m
+[31m-            except Exception, exception:[m
+[32m+[m[32m            except Exception as exception:[m
+                 queue.put(traceback.format_exc())[m
+                 queue.put(exception)[m
+ [m
+         try:[m
+[31m-            print "Enabling robot..."[m
+[32m+[m[32m            print("Enabling robot...")[m
+             self._rs.enable()[m
+[31m-            print "Test: Create Limb Instances"[m
+[32m+[m[32m            print("Test: Create Limb Instances")[m
+             right = baxter_interface.Limb('right')[m
+             left = baxter_interface.Limb('left')[m
+[31m-            left_queue = Queue.Queue()[m
+[31m-            right_queue = Queue.Queue()[m
+[32m+[m[32m            left_queue = queue.Queue()[m
+[32m+[m[32m            right_queue = queue.Queue()[m
+             # Max Joint Range (s0, s1, e0, e1, w0, w1, w2)[m
+             #     ( 1.701,  1.047,  3.054,  2.618,  3.059,  2.094,  3.059)[m
+             # Min Joint Range (e0, e1, s0, s1, w0, w1, w2)[m
+[36m@@ -291,19 +291,19 @@[m [mclass MoveArms(SmokeTest):[m
+                  [0.0, -0.55, 0.0, 0.75, 0.0, 1.26, 0.0],[m
+                 )[m
+             for move in joint_moves:[m
+[31m-                print "Test: Moving to Joint Positions: ",[m
+[31m-                print ", ".join("%.2f" % x for x in move)[m
+[32m+[m[32m                print("Test: Moving to Joint Positions: ",)[m
+[32m+[m[32m                print(", ".join("%.2f" % x for x in move))[m
+                 left_thread = threading.Thread([m
+                     target=move_thread,[m
+                     args=(left,[m
+[31m-                          dict(zip(left.joint_names(), move)),[m
+[32m+[m[32m                          dict(list(zip(left.joint_names(), move))),[m
+                           left_queue[m
+                           )[m
+                 )[m
+                 right_thread = threading.Thread([m
+                     target=move_thread,[m
+                     args=(right,[m
+[31m-                          dict(zip(right.joint_names(), move)),[m
+[32m+[m[32m                          dict(list(zip(right.joint_names(), move))),[m
+                           right_queue[m
+                           )[m
+                 )[m
+[36m@@ -328,7 +328,7 @@[m [mclass MoveArms(SmokeTest):[m
+                 if not result is None:[m
+                     raise right_queue.get()[m
+                 rospy.sleep(1.0)[m
+[31m-            print "Disabling robot..."[m
+[32m+[m[32m            print("Disabling robot...")[m
+             self._rs.disable()[m
+             self.result[0] = True[m
+             rospy.sleep(5.0)[m
+[36m@@ -348,14 +348,14 @@[m [mclass Grippers(SmokeTest):[m
+         Runs Grippers Smoke Test.[m
+         """[m
+         try:[m
+[31m-            print "Enabling robot, Moving to Neutral Location..."[m
+[32m+[m[32m            print("Enabling robot, Moving to Neutral Location...")[m
+             self._rs.enable()[m
+             for name in ['left', 'right']:[m
+                 limb = baxter_interface.Limb(name)[m
+                 gripper = baxter_interface.Gripper(name, CHECK_VERSION)[m
+                 limb.move_to_neutral()[m
+                 rospy.sleep(2.0)[m
+[31m-                print "Test: Verify %s Gripper Type" % (name.capitalize(),)[m
+[32m+[m[32m                print("Test: Verify %s Gripper Type" % (name.capitalize(),))[m
+                 if gripper.type() is not 'electric':[m
+                     raise NameError("Test Requires Two Electric Grippers")[m
+                 s_topic = 'robot/end_effector/' + name + '_gripper/state'[m
+[36m@@ -363,24 +363,24 @@[m [mclass Grippers(SmokeTest):[m
+                                                   EndEffectorState,[m
+                                                   5.0[m
+                                                   )[m
+[31m-                print "Test: Reboot %s Gripper" % (name.capitalize(),)[m
+[32m+[m[32m                print("Test: Reboot %s Gripper" % (name.capitalize(),))[m
+                 gripper.reboot()[m
+[31m-                print "Test: Calibrating %s Gripper" % (name.capitalize(),)[m
+[32m+[m[32m                print("Test: Calibrating %s Gripper" % (name.capitalize(),))[m
+                 gripper.calibrate()[m
+[31m-                print "Test: Close %s Gripper" % (name.capitalize(),)[m
+[32m+[m[32m                print("Test: Close %s Gripper" % (name.capitalize(),))[m
+                 gripper.close(True)[m
+[31m-                print "Test: Open %s Gripper" % (name.capitalize(),)[m
+[32m+[m[32m                print("Test: Open %s Gripper" % (name.capitalize(),))[m
+                 gripper.open(True)[m
+[31m-                print "Test: Close %s Gripper" % (name.capitalize(),)[m
+[32m+[m[32m                print("Test: Close %s Gripper" % (name.capitalize(),))[m
+                 gripper.close(True)[m
+[31m-                print "Test: Open %s Gripper" % (name.capitalize(),)[m
+[32m+[m[32m                print("Test: Open %s Gripper" % (name.capitalize(),))[m
+                 gripper.open(True)[m
+[31m-                print "Test: %s Gripper Position Moves" % (name.capitalize(),)[m
+[32m+[m[32m                print("Test: %s Gripper Position Moves" % (name.capitalize(),))[m
+                 gripper.command_position(50.0, True)[m
+                 gripper.command_position(75.0, True)[m
+                 gripper.command_position(0.0, True)[m
+                 gripper.command_position(100.0, True)[m
+[31m-                print "Test: %s Gripper Velocity Moves" % (name.capitalize(),)[m
+[32m+[m[32m                print("Test: %s Gripper Velocity Moves" % (name.capitalize(),))[m
+                 gripper.set_moving_force(100.0)[m
+                 gripper.set_velocity(50.0)[m
+                 gripper.close(True)[m
+[36m@@ -393,7 +393,7 @@[m [mclass Grippers(SmokeTest):[m
+                 gripper.set_moving_force(30.0)[m
+                 gripper.close(True)[m
+                 gripper.open(True)[m
+[31m-            print "Disabling robot..."[m
+[32m+[m[32m            print("Disabling robot...")[m
+             self._rs.disable()[m
+             self.result[0] = True[m
+         except Exception:[m
+[36m@@ -433,7 +433,7 @@[m [mclass BlinkLEDs(SmokeTest):[m
+                 )[m
+ [m
+             for itb in itb_names:[m
+[31m-                print "Test: Blink %s" % itb[m
+[32m+[m[32m                print("Test: Blink %s" % itb)[m
+                 io = baxter_interface.DigitalIO(itb)[m
+                 _blink(io)[m
+             self.result[0] = True[m
+[36m@@ -463,9 +463,9 @@[m [mclass Cameras(SmokeTest):[m
+             Open camera and display to screen for 10 seconds[m
+             """[m
+             camera.resolution = (960, 600,)[m
+[31m-            print "Test: Opening %s" % name[m
+[32m+[m[32m            print("Test: Opening %s" % name)[m
+             camera.open()[m
+[31m-            print "Test: Display %s to Screen - 10 Seconds" % name[m
+[32m+[m[32m            print("Test: Display %s to Screen - 10 Seconds" % name)[m
+             rospy.Subscriber([m
+                 '/cameras/' + name + "/image",[m
+                 Image,[m
+[36m@@ -504,10 +504,10 @@[m [mclass Cameras(SmokeTest):[m
+             """[m
+             Turn on the left/right_hand_cameras with default settings.[m
+             """[m
+[31m-            print "Restarting the Default Cameras..."[m
+[32m+[m[32m            print("Restarting the Default Cameras...")[m
+             camera_list = _list_cameras()[m
+             for camera_name in camera_names:[m
+[31m-                print "Restarting {0}".format(camera_name)[m
+[32m+[m[32m                print("Restarting {0}".format(camera_name))[m
+                 if not camera_name in camera_list.cameras:[m
+                     # Attempt to close another camera[m
+                     # and list services again[m
+[36m@@ -521,9 +521,9 @@[m [mclass Cameras(SmokeTest):[m
+                 camera.close()[m
+ [m
+         try:[m
+[31m-            print "Enabling robot..."[m
+[32m+[m[32m            print("Enabling robot...")[m
+             self._rs.enable()[m
+[31m-            print ("Test: Verify Left_Hand, Right_Hand, and Head "[m
+[32m+[m[32m            print("Test: Verify Left_Hand, Right_Hand, and Head "[m
+                    "Cameras Present")[m
+             camera_names = ([m
+                 'left_hand_camera',[m
+[36m@@ -541,7 +541,7 @@[m [mclass Cameras(SmokeTest):[m
+                 _display(camera, camera_name)[m
+                 camera_list = _list_cameras()[m
+             _reset_defaults()[m
+[31m-            print "Disabling robot..."[m
+[32m+[m[32m            print("Disabling robot...")[m
+             self._rs.disable()[m
+             self.result[0] = True[m
+         except Exception:[m

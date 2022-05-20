@@ -1,3 +1,31 @@
+ cfg/JointSpringsExample.cfg               |  2 +-
+ scripts/analog_io_rampup.py               | 10 +++++-----
+ scripts/digital_io_blink.py               |  8 ++++----
+ scripts/gripper_action_client.py          |  6 +++---
+ scripts/gripper_cuff_control.py           |  2 +-
+ scripts/gripper_joystick.py               |  4 ++--
+ scripts/gripper_keyboard.py               |  4 ++--
+ scripts/head_action_client.py             |  6 +++---
+ scripts/head_wobbler.py                   |  2 +-
+ scripts/ik_service_client.py              | 12 ++++++------
+ scripts/joint_position_file_playback.py   |  8 ++++----
+ scripts/joint_position_joystick.py        |  2 +-
+ scripts/joint_position_keyboard.py        |  4 ++--
+ scripts/joint_position_waypoints.py       |  2 +-
+ scripts/joint_recorder.py                 |  2 +-
+ scripts/joint_torque_springs.py           |  4 ++--
+ scripts/joint_trajectory_client.py        |  2 +-
+ scripts/joint_trajectory_file_playback.py | 10 +++++-----
+ scripts/joint_velocity_puppet.py          |  8 ++++----
+ scripts/joint_velocity_wobbler.py         |  4 ++--
+ scripts/navigator_io.py                   | 14 +++++++-------
+ scripts/send_urdf_fragment.py             |  2 +-
+ scripts/xdisplay_image.py                 |  2 +-
+ setup.py                                  |  2 +-
+ src/baxter_external_devices/getch.py      |  2 +-
+ src/baxter_external_devices/joystick.py   |  2 +-
+ 26 files changed, 63 insertions(+), 63 deletions(-)
+
 diff --git a/cfg/JointSpringsExample.cfg b/cfg/JointSpringsExample.cfg
 index b98faa5..4feb664 100755
 --- a/cfg/JointSpringsExample.cfg
