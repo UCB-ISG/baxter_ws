@@ -1,7 +1,9 @@
 *~
+*.bak
 /.catkin_workspace
 /build/
 /devel/
 /install/
 
-#/src/
+/src/CMakeList.txt
+/.vscode/browse.vc.*
