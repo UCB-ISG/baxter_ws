@@ -1,0 +1,180 @@
+ .gitignore                                         |  2 ++
+ .rosinstall                                        |  2 +-
+ atlas_moveit_config/config/kinematics.yaml~        | 36 ----------------------
+ iri_wam_moveit_config/scripts/modules/common.py    | 22 ++++++-------
+ .../scripts/simple_moveit_example.py               |  8 ++---
+ r2_moveit_generated/launch/upload_r2.launch        |  4 +--
+ 6 files changed, 20 insertions(+), 54 deletions(-)
+
+diff --git a/.gitignore b/.gitignore
+index 63e6b27..0e35a6b 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,2 +1,4 @@
++*~
++
+ CATKIN_IGNORE
+ default_warehouse_mongo_db/
+diff --git a/.rosinstall b/.rosinstall
+index 061cfe5..fbb9e8c 100644
+--- a/.rosinstall
++++ b/.rosinstall
+@@ -3,4 +3,4 @@
+ - git:
+     local-name: baxter_common
+     uri: https://github.com/RethinkRobotics/baxter_common.git
+-    version: kinetic-devel
++    version: ucb-noetic-devel
+diff --git a/atlas_moveit_config/config/kinematics.yaml~ b/atlas_moveit_config/config/kinematics.yaml~
+deleted file mode 100644
+index 90df127..0000000
+--- a/atlas_moveit_config/config/kinematics.yaml~
++++ /dev/null
+@@ -1,36 +0,0 @@
+-right_arm:
+-  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+-  kinematics_solver_search_resolution: 0.005
+-  kinematics_solver_timeout: 0.005
+-  kinematics_solver_attempts: 3
+-left_arm:
+-  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+-  kinematics_solver_search_resolution: 0.005
+-  kinematics_solver_timeout: 0.005
+-  kinematics_solver_attempts: 3
+-right_arm_torso:
+-  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+-  kinematics_solver_search_resolution: 0.005
+-  kinematics_solver_timeout: 0.005
+-  kinematics_solver_attempts: 3
+-  redundant_joints:
+-    - back_lbz
+-    - back_mby
+-left_arm_torso:
+-  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+-  kinematics_solver_search_resolution: 0.005
+-  kinematics_solver_timeout: 0.005
+-  kinematics_solver_attempts: 3
+-  redundant_joints:
+-    - back_lbz
+-    - back_mby
+-right_hand:
+-  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+-  kinematics_solver_search_resolution: 0.005
+-  kinematics_solver_timeout: 0.005
+-  kinematics_solver_attempts: 3
+-left_hand:
+-  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+-  kinematics_solver_search_resolution: 0.005
+-  kinematics_solver_timeout: 0.005
+-  kinematics_solver_attempts: 3
+\ No newline at end of file
+diff --git a/iri_wam_moveit_config/scripts/modules/common.py b/iri_wam_moveit_config/scripts/modules/common.py
+index 74f2e72..54729df 100644
+--- a/iri_wam_moveit_config/scripts/modules/common.py
++++ b/iri_wam_moveit_config/scripts/modules/common.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ import sys 
+ import csv 
+@@ -18,40 +18,40 @@ DEBUG = True
+ def plan_and_move_in_joints(group, jm_request):
+   group.clear_pose_targets()
+   if DEBUG:
+-    print "======= Current Joint values: %s" % group.get_current_joint_values()
+-    print "======= Requested Joint values: %s" % jm_request.positions
++    print("======= Current Joint values: %s" % group.get_current_joint_values())
++    print("======= Requested Joint values: %s" % jm_request.positions)
+     sys.stdout.flush()
+   group.set_joint_value_target(jm_request.positions)
+   plan = group.plan()
+   if plan.joint_trajectory.points:
+-    print "======= Executing trajectory plan..."
++    print("======= Executing trajectory plan...")
+     sys.stdout.flush()
+     group.go(wait=True)
+     return True
+   else:
+-    print "======= Planning NOT Possible"
++    print("======= Planning NOT Possible")
+     sys.stdout.flush()
+     return False
+ 
+ def plan_and_move_in_cartesians(group, pose_st):
+   group.clear_pose_targets()
+   if DEBUG:
+-    print "======= From frame: %s" % group.get_planning_frame()
+-    print "======= To frame: %s" % group.get_end_effector_link()
+-  print "======= Generating plan"
++    print("======= From frame: %s" % group.get_planning_frame())
++    print("======= To frame: %s" % group.get_end_effector_link())
++  print("======= Generating plan")
+   sys.stdout.flush()
+   group.set_pose_target(pose_st)
+   plan = group.plan()
+   if plan.joint_trajectory.points:
+-    print "======= Executing plan"
++    print("======= Executing plan")
+     sys.stdout.flush()
+     #group.go(wait=True)
+     group.execute(plan)
+     #wait_in_secs(2)
+-    print "======= Plan Executed"
++    print("======= Plan Executed")
+     return True
+   else:
+-    print "======= Plan NOT Possible"
++    print("======= Plan NOT Possible")
+     sys.stdout.flush()
+     return False
+ 
+diff --git a/iri_wam_moveit_config/scripts/simple_moveit_example.py b/iri_wam_moveit_config/scripts/simple_moveit_example.py
+index fcbe47a..7e07ea8 100755
+--- a/iri_wam_moveit_config/scripts/simple_moveit_example.py
++++ b/iri_wam_moveit_config/scripts/simple_moveit_example.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ #
+ # Usage:
+ # rosrun iri_wam_moveit_config simple_moveit_example.py
+@@ -45,11 +45,11 @@ initial_pose.acceleration = 0.5
+ 
+ if __name__ == "__main__":
+ 
+-  print "======= Init Simple MoveIt Example"
++  print("======= Init Simple MoveIt Example")
+   moveit_commander.roscpp_initialize(sys.argv)
+   rospy.init_node('iri_simple_moveit_example', anonymous=True)
+ 
+-  print "======= Connecting Node with MoveIt"
++  print("======= Connecting Node with MoveIt")
+   sys.stdout.flush()
+   robot = moveit_commander.RobotCommander()
+   scene = moveit_commander.PlanningSceneInterface()
+@@ -79,6 +79,6 @@ if __name__ == "__main__":
+   # Go To Initial Pose
+   common.plan_and_move_in_joints(group, home_pose)
+ 
+-  print "======= THE END"
++  print("======= THE END")
+   sys.stdout.flush()
+   moveit_commander.os._exit(0)
+diff --git a/r2_moveit_generated/launch/upload_r2.launch b/r2_moveit_generated/launch/upload_r2.launch
+index d67134a..80212d5 100644
+--- a/r2_moveit_generated/launch/upload_r2.launch
++++ b/r2_moveit_generated/launch/upload_r2.launch
+@@ -2,10 +2,10 @@
+     <arg name="kinect" default="true"/>
+     <!-- send r2 urdf to param server -->
+     <group if="$(arg kinect)">
+-      <param name="robot_description" command="$(find xacro)/xacro.py '$(find r2_description)/robots/r2.urdf.xacro'" />
++      <param name="robot_description" command="$(find xacro)/xacro '$(find r2_description)/robots/r2.urdf.xacro'" />
+     </group>
+     <group unless="$(arg kinect)">
+-      <param name="robot_description" command="$(find xacro)/xacro.py '$(find r2_description)/robots/r2_no_kinect.urdf.xacro'" />
++      <param name="robot_description" command="$(find xacro)/xacro '$(find r2_description)/robots/r2_no_kinect.urdf.xacro'" />
+     </group>
+ 
+     <!-- the semantic description that corresponds to the URDF -->

@@ -1,0 +1,204 @@
+ .../scripts/ik_pick_and_place_demo.py              | 14 ++++++-------
+ baxter_sim_hardware/src/baxter_emulator.cpp        |  2 +-
+ baxter_sim_io/CMakeLists.txt                       |  3 ++-
+ baxter_sim_io/package.xml                          | 10 +++++++++
+ baxter_sim_kinematics/src/arm_kinematics.cpp       |  8 ++++----
+ baxter_simulator.rosinstall                        | 24 +++++++++++-----------
+ 6 files changed, 36 insertions(+), 25 deletions(-)
+
+diff --git a/baxter_sim_examples/scripts/ik_pick_and_place_demo.py b/baxter_sim_examples/scripts/ik_pick_and_place_demo.py
+index ca199b2..980b7c2 100755
+--- a/baxter_sim_examples/scripts/ik_pick_and_place_demo.py
++++ b/baxter_sim_examples/scripts/ik_pick_and_place_demo.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -80,7 +80,7 @@ class PickAndPlace(object):
+     def move_to_start(self, start_angles=None):
+         print("Moving the {0} arm to start pose...".format(self._limb_name))
+         if not start_angles:
+-            start_angles = dict(zip(self._joint_names, [0]*7))
++            start_angles = dict(list(zip(self._joint_names, [0]*7)))
+         self._guarded_move_to_joint_position(start_angles)
+         self.gripper_open()
+         rospy.sleep(1.0)
+@@ -92,7 +92,7 @@ class PickAndPlace(object):
+         ikreq.pose_stamp.append(PoseStamped(header=hdr, pose=pose))
+         try:
+             resp = self._iksvc(ikreq)
+-        except (rospy.ServiceException, rospy.ROSException), e:
++        except (rospy.ServiceException, rospy.ROSException) as e:
+             rospy.logerr("Service call failed: %s" % (e,))
+             return False
+         # Check if result valid, and type of seed ultimately used to get solution
+@@ -109,7 +109,7 @@ class PickAndPlace(object):
+                 print("IK Solution SUCCESS - Valid Joint Solution Found from Seed Type: {0}".format(
+                          (seed_str)))
+             # Format solution into Limb API-compatible dictionary
+-            limb_joints = dict(zip(resp.joints[0].name, resp.joints[0].position))
++            limb_joints = dict(list(zip(resp.joints[0].name, resp.joints[0].position)))
+             if self._verbose:
+                 print("IK Joint Solution:\n{0}".format(limb_joints))
+                 print("------------------")
+@@ -201,7 +201,7 @@ def load_gazebo_models(table_pose=Pose(position=Point(x=1.0, y=0.0, z=0.0)),
+         spawn_sdf = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
+         resp_sdf = spawn_sdf("cafe_table", table_xml, "/",
+                              table_pose, table_reference_frame)
+-    except rospy.ServiceException, e:
++    except rospy.ServiceException as e:
+         rospy.logerr("Spawn SDF service call failed: {0}".format(e))
+     # Spawn Block URDF
+     rospy.wait_for_service('/gazebo/spawn_urdf_model')
+@@ -209,7 +209,7 @@ def load_gazebo_models(table_pose=Pose(position=Point(x=1.0, y=0.0, z=0.0)),
+         spawn_urdf = rospy.ServiceProxy('/gazebo/spawn_urdf_model', SpawnModel)
+         resp_urdf = spawn_urdf("block", block_xml, "/",
+                                block_pose, block_reference_frame)
+-    except rospy.ServiceException, e:
++    except rospy.ServiceException as e:
+         rospy.logerr("Spawn URDF service call failed: {0}".format(e))
+ 
+ def delete_gazebo_models():
+@@ -221,7 +221,7 @@ def delete_gazebo_models():
+         delete_model = rospy.ServiceProxy('/gazebo/delete_model', DeleteModel)
+         resp_delete = delete_model("cafe_table")
+         resp_delete = delete_model("block")
+-    except rospy.ServiceException, e:
++    except rospy.ServiceException as e:
+         rospy.loginfo("Delete Model service call failed: {0}".format(e))
+ 
+ def main():
+diff --git a/baxter_sim_hardware/src/baxter_emulator.cpp b/baxter_sim_hardware/src/baxter_emulator.cpp
+index c22803f..829aaff 100644
+--- a/baxter_sim_hardware/src/baxter_emulator.cpp
++++ b/baxter_sim_hardware/src/baxter_emulator.cpp
+@@ -280,7 +280,7 @@ void baxter_emulator::startPublishLoop(const std::string& img_path)
+   cv_bridge::CvImagePtr cv_ptr(new cv_bridge::CvImage);
+   try
+   {
+-    cv_ptr->image = cv::imread(img_path, CV_LOAD_IMAGE_UNCHANGED);
++    cv_ptr->image = cv::imread(img_path, cv::IMREAD_UNCHANGED); //WAS: CV_LOAD_IMAGE_UNCHANGED)
+     if (cv_ptr->image.data)
+     {
+       cv_ptr->encoding = sensor_msgs::image_encodings::BGR8;
+diff --git a/baxter_sim_io/CMakeLists.txt b/baxter_sim_io/CMakeLists.txt
+index a5e8825..99ac0c7 100644
+--- a/baxter_sim_io/CMakeLists.txt
++++ b/baxter_sim_io/CMakeLists.txt
+@@ -15,7 +15,8 @@ SET(CMAKE_CXX_FLAGS "-fPIC")
+ 
+ set(CMAKE_AUTOMOC ON)
+ find_package(catkin REQUIRED COMPONENTS roscpp baxter_core_msgs)
+-find_package(Qt5Widgets REQUIRED)
++#find_package(Qt5Widgets REQUIRED)
++find_package(Qt5 REQUIRED Core Widgets)
+ 
+ include_directories(${catkin_INCLUDE_DIRS})
+ # Use this to define what the package will export (e.g. libs, headers).
+diff --git a/baxter_sim_io/package.xml b/baxter_sim_io/package.xml
+index d1f1796..47077bb 100644
+--- a/baxter_sim_io/package.xml
++++ b/baxter_sim_io/package.xml
+@@ -12,9 +12,19 @@
+ 
+   <buildtool_depend>catkin</buildtool_depend>
+   <!--build_depend>qt_build</build_depend-->
++  <build_depend>libogre-dev</build_depend>
++  <build_depend>qtbase5-dev</build_depend>
++  <build_depend>libqt5-opengl-dev</build_depend>
++
+   <build_depend>roscpp</build_depend>
+   <build_depend>baxter_core_msgs</build_depend>
+   <!--run_depend>qt_build</run_depend-->
++  <build_depend>libogre</build_depend>
++  <run_depend>libqt5-core</run_depend>
++  <run_depend>libqt5-gui</run_depend>
++  <run_depend>libqt5-widgets</run_depend>
++  <run_depend>libqt5-opengl</run_depend>
++
+   <run_depend>roscpp</run_depend>
+   <run_depend>baxter_core_msgs</run_depend>
+ 
+diff --git a/baxter_sim_kinematics/src/arm_kinematics.cpp b/baxter_sim_kinematics/src/arm_kinematics.cpp
+index 453b37d..66f998b 100644
+--- a/baxter_sim_kinematics/src/arm_kinematics.cpp
++++ b/baxter_sim_kinematics/src/arm_kinematics.cpp
+@@ -264,8 +264,7 @@ bool Kinematics::loadModel(const std::string xml)
+ bool Kinematics::readJoints(urdf::Model& robot_model)
+ {
+   num_joints = 0;
+-  boost::shared_ptr<const urdf::Link> link = robot_model.getLink(tip_name);
+-  boost::shared_ptr<const urdf::Joint> joint;
++  auto link = robot_model.getLink(tip_name);
+   for (int i = 0; i < chain.getNrOfSegments(); i++)
+     while (link && link->name != root_name)
+     {
+@@ -273,7 +272,7 @@ bool Kinematics::readJoints(urdf::Model& robot_model)
+       {
+         break;
+       }
+-      joint = robot_model.getJoint(link->parent_joint->name);
++      auto joint = robot_model.getJoint(link->parent_joint->name);
+       if (!joint)
+       {
+         ROS_ERROR_NAMED("arm_kinematics", "Could not find joint: %s", link->parent_joint->name.c_str());
+@@ -295,7 +294,7 @@ bool Kinematics::readJoints(urdf::Model& robot_model)
+   unsigned int i = 0;
+   while (link && i < num_joints)
+   {
+-    joint = robot_model.getJoint(link->parent_joint->name);
++    auto joint = robot_model.getJoint(link->parent_joint->name);
+     if (joint->type != urdf::Joint::UNKNOWN && joint->type != urdf::Joint::FIXED)
+     {
+       ROS_DEBUG_NAMED("arm_kinematics", "getting bounds for joint: [%s]", joint->name.c_str());
+@@ -446,6 +445,7 @@ bool arm_kinematics::Kinematics::getPositionIK(const geometry_msgs::PoseStamped&
+   KDL::JntArray jnt_pos_out;
+ 
+   jnt_pos_in.resize(num_joints);
++  jnt_pos_out.resize(num_joints);  //WARN: Necessary to make CartToJnt happy (otherwise returns -4)
+   // Copying the positions of the joints relative to its index in the KDL chain
+   for (unsigned int i = 0; i < num_joints; i++)
+   {
+diff --git a/baxter_simulator.rosinstall b/baxter_simulator.rosinstall
+index 5abb621..fafe1c7 100644
+--- a/baxter_simulator.rosinstall
++++ b/baxter_simulator.rosinstall
+@@ -1,24 +1,24 @@
+ - git:
+     local-name: baxter_simulator
+-    uri: https://github.com/RethinkRobotics/baxter_simulator.git
+-    version: kinetic-devel
++    uri: https://github.com/UCB-ISG/baxter_simulator.git
++    version: ucb-noetic-devel
+ - git:
+     local-name: baxter
+-    uri: https://github.com/RethinkRobotics/baxter.git
+-    version: development
++    uri: https://github.com/UCB-ISG/baxter.git
++    version: ucb-noetic-devel
+ - git:
+     local-name: baxter_interface
+-    uri: https://github.com/RethinkRobotics/baxter_interface.git
+-    version: development
++    uri: https://github.com/UCB-ISG/baxter_interface.git
++    version: ucb-noetic-devel
+ - git:
+     local-name: baxter_tools
+-    uri: https://github.com/RethinkRobotics/baxter_tools.git
+-    version: development
++    uri: https://github.com/UCB-ISG/baxter_tools.git
++    version: ucb-noetic-devel
+ - git:
+     local-name: baxter_common
+-    uri: https://github.com/RethinkRobotics/baxter_common.git
+-    version: kinetic-devel
++    uri: https://github.com/UCB-ISG/baxter_common.git
++    version: ucb-noetic-devel
+ - git:
+     local-name: baxter_examples
+-    uri: https://github.com/RethinkRobotics/baxter_examples.git
+-    version: development
++    uri: https://github.com/UCB-ISG/baxter_examples.git
++    version: ucb-noetic-devel

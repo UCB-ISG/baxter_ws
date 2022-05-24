@@ -1,4 +1,3 @@
-###########################################
 - git:
     local-name: baxter
     uri: https://github.com/RethinkRobotics/baxter.git
@@ -16,16 +15,14 @@
     uri: https://github.com/RethinkRobotics/baxter_interface.git
     version: release-1.2.0
 - git:
+    local-name: baxter_simulator
+    uri: https://github.com/RethinkRobotics/baxter_simulator.git
+    version: kinetic-optional-grippers
+- git:
     local-name: baxter_tools
     uri: https://github.com/RethinkRobotics/baxter_tools.git
     version: release-1.2.0
-###
 - git:
     local-name: moveit_robots
     uri: https://github.com/ros-planning/moveit_robots.git
     version: kinetic-devel
-- git:
-    local-name: baxter_simulator
-    uri: https://github.com/RethinkRobotics/baxter_simulator.git
-    version: kinetic-optional-grippers
-###########################################

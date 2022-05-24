@@ -1,0 +1,529 @@
+ cfg/JointSpringsExample.cfg               |  2 +-
+ scripts/analog_io_rampup.py               | 10 +++++-----
+ scripts/digital_io_blink.py               |  8 ++++----
+ scripts/gripper_action_client.py          |  6 +++---
+ scripts/gripper_cuff_control.py           |  2 +-
+ scripts/gripper_joystick.py               |  4 ++--
+ scripts/gripper_keyboard.py               |  4 ++--
+ scripts/head_action_client.py             |  6 +++---
+ scripts/head_wobbler.py                   |  2 +-
+ scripts/ik_service_client.py              | 12 ++++++------
+ scripts/joint_position_file_playback.py   |  8 ++++----
+ scripts/joint_position_joystick.py        |  2 +-
+ scripts/joint_position_keyboard.py        |  4 ++--
+ scripts/joint_position_waypoints.py       |  2 +-
+ scripts/joint_recorder.py                 |  2 +-
+ scripts/joint_torque_springs.py           |  4 ++--
+ scripts/joint_trajectory_client.py        |  2 +-
+ scripts/joint_trajectory_file_playback.py | 10 +++++-----
+ scripts/joint_velocity_puppet.py          |  8 ++++----
+ scripts/joint_velocity_wobbler.py         |  4 ++--
+ scripts/navigator_io.py                   | 14 +++++++-------
+ scripts/send_urdf_fragment.py             |  2 +-
+ scripts/xdisplay_image.py                 |  2 +-
+ setup.py                                  |  2 +-
+ src/baxter_external_devices/getch.py      |  2 +-
+ src/baxter_external_devices/joystick.py   |  2 +-
+ 26 files changed, 63 insertions(+), 63 deletions(-)
+
+diff --git a/cfg/JointSpringsExample.cfg b/cfg/JointSpringsExample.cfg
+index b98faa5..4feb664 100755
+--- a/cfg/JointSpringsExample.cfg
++++ b/cfg/JointSpringsExample.cfg
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+diff --git a/scripts/analog_io_rampup.py b/scripts/analog_io_rampup.py
+index 1709416..09413fe 100755
+--- a/scripts/analog_io_rampup.py
++++ b/scripts/analog_io_rampup.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -42,20 +42,20 @@ def test_interface(io_component='torso_fan'):
+     rate = rospy.Rate(2)
+ 
+     # start: 0.0
+-    print b.state()
++    print(b.state())
+ 
+     # ramp up
+     for i in range(0, 101, 10):
+         b.set_output(i)
+-        print i
++        print(i)
+         rate.sleep()
+     # max: 100.0
+-    print b.state()
++    print(b.state())
+ 
+     # ramp down
+     for i in range(100, -1, -10):
+         b.set_output(i)
+-        print i
++        print(i)
+         rate.sleep()
+     # (fans off)
+     b.set_output(0)
+diff --git a/scripts/digital_io_blink.py b/scripts/digital_io_blink.py
+index f679cb9..26c17c3 100755
+--- a/scripts/digital_io_blink.py
++++ b/scripts/digital_io_blink.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -39,17 +39,17 @@ def test_interface(io_component='left_outer_light'):
+     rospy.loginfo("Blinking Digital Output: %s", io_component)
+     b = DIO.DigitalIO(io_component)
+ 
+-    print "Initial state: ", b.state
++    print("Initial state: ", b.state)
+ 
+     # turn on light
+     b.set_output(True)
+     rospy.sleep(1)
+-    print "New state: ", b.state
++    print("New state: ", b.state)
+ 
+     # reset output
+     b.set_output(False)
+     rospy.sleep(1)
+-    print "Final state:", b.state
++    print("Final state:", b.state)
+ 
+ 
+ def main():
+diff --git a/scripts/gripper_action_client.py b/scripts/gripper_action_client.py
+index 935d2b6..5cd4bf7 100755
+--- a/scripts/gripper_action_client.py
++++ b/scripts/gripper_action_client.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -122,8 +122,8 @@ def main():
+     gc.command(position=0.0, effort=30.0)
+     gc.wait()
+     gc.command(position=100.0, effort=40.0)
+-    print gc.wait()
+-    print "Exiting - Gripper Action Test Example Complete"
++    print(gc.wait())
++    print("Exiting - Gripper Action Test Example Complete")
+ 
+ if __name__ == "__main__":
+     main()
+diff --git a/scripts/gripper_cuff_control.py b/scripts/gripper_cuff_control.py
+index facac66..e460c2e 100755
+--- a/scripts/gripper_cuff_control.py
++++ b/scripts/gripper_cuff_control.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2
++#!/usr/bin/python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+diff --git a/scripts/gripper_joystick.py b/scripts/gripper_joystick.py
+index 58a539c..17a9c4b 100755
+--- a/scripts/gripper_joystick.py
++++ b/scripts/gripper_joystick.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -81,7 +81,7 @@ def map_joystick(joystick):
+     def capability_warning(gripper, cmd):
+         msg = ("%s %s - not capable of '%s' command" %
+                (gripper.name, gripper.type(), cmd))
+-        print msg
++        print(msg)
+ 
+     def offset_position(gripper, offset):
+         if gripper.type() != 'electric':
+diff --git a/scripts/gripper_keyboard.py b/scripts/gripper_keyboard.py
+index f631677..cf342a3 100755
+--- a/scripts/gripper_keyboard.py
++++ b/scripts/gripper_keyboard.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -150,7 +150,7 @@ def map_keyboard():
+                 print("key bindings: ")
+                 print("  Esc: Quit")
+                 print("  ?: Help")
+-                for key, val in sorted(bindings.items(),
++                for key, val in sorted(list(bindings.items()),
+                                        key=lambda x: x[1][2]):
+                     print("  %s: %s" % (key, val[2]))
+     # force shutdown call if caught by key handler
+diff --git a/scripts/head_action_client.py b/scripts/head_action_client.py
+index 206b8fc..e5dbcf8 100755
+--- a/scripts/head_action_client.py
++++ b/scripts/head_action_client.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -110,8 +110,8 @@ def main():
+     hc.command(position=-1.0, velocity=0.4)
+     hc.wait()
+     hc.command(position=0.0, velocity=0.6)
+-    print hc.wait()
+-    print "Exiting - Head Action Test Example Complete"
++    print(hc.wait())
++    print("Exiting - Head Action Test Example Complete")
+ 
+ if __name__ == "__main__":
+     main()
+diff --git a/scripts/head_wobbler.py b/scripts/head_wobbler.py
+index 6d1e929..7bc685a 100755
+--- a/scripts/head_wobbler.py
++++ b/scripts/head_wobbler.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+diff --git a/scripts/ik_service_client.py b/scripts/ik_service_client.py
+index d9850bb..3e9eae3 100755
+--- a/scripts/ik_service_client.py
++++ b/scripts/ik_service_client.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -95,7 +95,7 @@ def ik_test(limb):
+     try:
+         rospy.wait_for_service(ns, 5.0)
+         resp = iksvc(ikreq)
+-    except (rospy.ServiceException, rospy.ROSException), e:
++    except (rospy.ServiceException, rospy.ROSException) as e:
+         rospy.logerr("Service call failed: %s" % (e,))
+         return 1
+ 
+@@ -112,10 +112,10 @@ def ik_test(limb):
+         print("SUCCESS - Valid Joint Solution Found from Seed Type: %s" %
+               (seed_str,))
+         # Format solution into Limb API-compatible dictionary
+-        limb_joints = dict(zip(resp.joints[0].name, resp.joints[0].position))
+-        print "\nIK Joint Solution:\n", limb_joints
+-        print "------------------"
+-        print "Response Message:\n", resp
++        limb_joints = dict(list(zip(resp.joints[0].name, resp.joints[0].position)))
++        print("\nIK Joint Solution:\n", limb_joints)
++        print("------------------")
++        print("Response Message:\n", resp)
+     else:
+         print("INVALID POSE - No Valid Joint Solution Found.")
+ 
+diff --git a/scripts/joint_position_file_playback.py b/scripts/joint_position_file_playback.py
+index 2ab2b30..4b347c6 100755
+--- a/scripts/joint_position_file_playback.py
++++ b/scripts/joint_position_file_playback.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -57,14 +57,14 @@ def clean_line(line, names):
+     #convert the line of strings to a float or None
+     line = [try_float(x) for x in line.rstrip().split(',')]
+     #zip the values with the joint names
+-    combined = zip(names[1:], line[1:])
++    combined = list(zip(names[1:], line[1:]))
+     #take out any tuples that have a none value
+     cleaned = [x for x in combined if x[1] is not None]
+     #convert it to a dictionary with only valid commands
+     command = dict(cleaned)
+-    left_command = dict((key, command[key]) for key in command.keys()
++    left_command = dict((key, command[key]) for key in list(command.keys())
+                         if key[:-2] == 'left_')
+-    right_command = dict((key, command[key]) for key in command.keys()
++    right_command = dict((key, command[key]) for key in list(command.keys())
+                          if key[:-2] == 'right_')
+     return (command, left_command, right_command, line)
+ 
+diff --git a/scripts/joint_position_joystick.py b/scripts/joint_position_joystick.py
+index b7f86ae..0a172c2 100755
+--- a/scripts/joint_position_joystick.py
++++ b/scripts/joint_position_joystick.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+diff --git a/scripts/joint_position_keyboard.py b/scripts/joint_position_keyboard.py
+index 7317cac..6779a3f 100755
+--- a/scripts/joint_position_keyboard.py
++++ b/scripts/joint_position_keyboard.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -109,7 +109,7 @@ def map_keyboard():
+                 print("key bindings: ")
+                 print("  Esc: Quit")
+                 print("  ?: Help")
+-                for key, val in sorted(bindings.items(),
++                for key, val in sorted(list(bindings.items()),
+                                        key=lambda x: x[1][2]):
+                     print("  %s: %s" % (key, val[2]))
+ 
+diff --git a/scripts/joint_position_waypoints.py b/scripts/joint_position_waypoints.py
+index 4992af6..ef816f6 100755
+--- a/scripts/joint_position_waypoints.py
++++ b/scripts/joint_position_waypoints.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+diff --git a/scripts/joint_recorder.py b/scripts/joint_recorder.py
+index 1f86062..02f1c89 100755
+--- a/scripts/joint_recorder.py
++++ b/scripts/joint_recorder.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+diff --git a/scripts/joint_torque_springs.py b/scripts/joint_torque_springs.py
+index 20f0fa7..64fc632 100755
+--- a/scripts/joint_torque_springs.py
++++ b/scripts/joint_torque_springs.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -112,7 +112,7 @@ class JointSprings(object):
+         cur_pos = self._limb.joint_angles()
+         cur_vel = self._limb.joint_velocities()
+         # calculate current forces
+-        for joint in self._start_angles.keys():
++        for joint in list(self._start_angles.keys()):
+             # spring portion
+             cmd[joint] = self._springs[joint] * (self._start_angles[joint] -
+                                                    cur_pos[joint])
+diff --git a/scripts/joint_trajectory_client.py b/scripts/joint_trajectory_client.py
+index 0b2f0ef..e5cf607 100755
+--- a/scripts/joint_trajectory_client.py
++++ b/scripts/joint_trajectory_client.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+diff --git a/scripts/joint_trajectory_file_playback.py b/scripts/joint_trajectory_file_playback.py
+index 4131297..7814d4b 100755
+--- a/scripts/joint_trajectory_file_playback.py
++++ b/scripts/joint_trajectory_file_playback.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -157,7 +157,7 @@ class Trajectory(object):
+         #convert the line of strings to a float or None
+         line = [try_float(x) for x in line.rstrip().split(',')]
+         #zip the values with the joint names
+-        combined = zip(joint_names[1:], line[1:])
++        combined = list(zip(joint_names[1:], line[1:]))
+         #take out any tuples that have a none value
+         cleaned = [x for x in combined if x[1] is not None]
+         #convert it to a dictionary with only valid commands
+@@ -222,10 +222,10 @@ class Trajectory(object):
+                     cur.append(self._r_arm.joint_angle(name))
+                     prm = rospy.get_param(vel_param % name, 0.25)
+                     dflt_vel.append(prm)
+-            diffs = map(operator.sub, cmd, cur)
+-            diffs = map(operator.abs, diffs)
++            diffs = list(map(operator.sub, cmd, cur))
++            diffs = list(map(operator.abs, diffs))
+             #determine the largest time offset necessary across all joints
+-            offset = max(map(operator.div, diffs, dflt_vel))
++            offset = max(list(map(operator.div, diffs, dflt_vel)))
+             return offset
+ 
+         for idx, values in enumerate(lines[1:]):
+diff --git a/scripts/joint_velocity_puppet.py b/scripts/joint_velocity_puppet.py
+index d2d59d8..2e0f6c2 100755
+--- a/scripts/joint_velocity_puppet.py
++++ b/scripts/joint_velocity_puppet.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -65,7 +65,7 @@ class Puppeteer(object):
+ 
+     def _reset_control_modes(self):
+         rate = rospy.Rate(100)
+-        for _ in xrange(100):
++        for _ in range(100):
+             if rospy.is_shutdown():
+                 return False
+             self._control_arm.exit_control_mode()
+@@ -101,9 +101,9 @@ class Puppeteer(object):
+         control_joint_names = self._control_arm.joint_names()
+         puppet_joint_names = self._puppet_arm.joint_names()
+ 
+-        print ("Puppeting:\n"
++        print("Puppeting:\n"
+               "  Grab %s cuff and move arm.\n"
+-              "  Press Ctrl-C to stop...") % (self._control_limb,)
++              "  Press Ctrl-C to stop..." % (self._control_limb,))
+         while not rospy.is_shutdown():
+             cmd = {}
+             for idx, name in enumerate(puppet_joint_names):
+diff --git a/scripts/joint_velocity_wobbler.py b/scripts/joint_velocity_wobbler.py
+index 4e9d80f..4a4b73b 100755
+--- a/scripts/joint_velocity_wobbler.py
++++ b/scripts/joint_velocity_wobbler.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -69,7 +69,7 @@ class Wobbler(object):
+ 
+     def _reset_control_modes(self):
+         rate = rospy.Rate(self._rate)
+-        for _ in xrange(100):
++        for _ in range(100):
+             if rospy.is_shutdown():
+                 return False
+             self._left_arm.exit_control_mode()
+diff --git a/scripts/navigator_io.py b/scripts/navigator_io.py
+index 5f3ffa8..d59f957 100755
+--- a/scripts/navigator_io.py
++++ b/scripts/navigator_io.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2
++#!/usr/bin/python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+@@ -42,7 +42,7 @@ def blink():
+         baxter_interface.Navigator('torso_left'),
+         baxter_interface.Navigator('torso_right'),)
+ 
+-    print ("Blinking LED's for 10 seconds")
++    print("Blinking LED's for 10 seconds")
+     rate = rospy.Rate(10)
+     i = 0
+     while not rospy.is_shutdown() and i < 100:
+@@ -55,16 +55,16 @@ def blink():
+ 
+ def echo_input():
+     def b0_pressed(v):
+-        print ("Button 0: %s" % (v,))
++        print("Button 0: %s" % (v,))
+ 
+     def b1_pressed(v):
+-        print ("Button 1: %s" % (v,))
++        print("Button 1: %s" % (v,))
+ 
+     def b2_pressed(v):
+-        print ("Button 2: %s" % (v,))
++        print("Button 2: %s" % (v,))
+ 
+     def wheel_moved(v):
+-        print ("Wheel Increment: %d, New Value: %s" % (v, nav.wheel))
++        print("Wheel Increment: %d, New Value: %s" % (v, nav.wheel))
+ 
+     nav = baxter_interface.Navigator('left')
+     nav.button0_changed.connect(b0_pressed)
+@@ -72,7 +72,7 @@ def echo_input():
+     nav.button2_changed.connect(b2_pressed)
+     nav.wheel_changed.connect(wheel_moved)
+ 
+-    print ("Press input buttons on the left navigator, "
++    print("Press input buttons on the left navigator, "
+            "input will be echoed here.")
+ 
+     rate = rospy.Rate(1)
+diff --git a/scripts/send_urdf_fragment.py b/scripts/send_urdf_fragment.py
+index cb5d8b5..ede1597 100755
+--- a/scripts/send_urdf_fragment.py
++++ b/scripts/send_urdf_fragment.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2
++#!/usr/bin/python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+diff --git a/scripts/xdisplay_image.py b/scripts/xdisplay_image.py
+index e353820..f09cca1 100755
+--- a/scripts/xdisplay_image.py
++++ b/scripts/xdisplay_image.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2
++#!/usr/bin/python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
+diff --git a/setup.py b/setup.py
+index 7434836..6b3e976 100644
+--- a/setup.py
++++ b/setup.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ from distutils.core import setup
+ from catkin_pkg.python_setup import generate_distutils_setup
+ 
+diff --git a/src/baxter_external_devices/getch.py b/src/baxter_external_devices/getch.py
+index c6c95c5..143ae77 100644
+--- a/src/baxter_external_devices/getch.py
++++ b/src/baxter_external_devices/getch.py
+@@ -52,7 +52,7 @@ def getch(timeout=0.01):
+         if fileno in rlist:
+             ch = sys.stdin.read(1)
+     except Exception as ex:
+-        print "getch", ex
++        print("getch", ex)
+         raise OSError
+     finally:
+         termios.tcsetattr(fileno, termios.TCSADRAIN, old_settings)
+diff --git a/src/baxter_external_devices/joystick.py b/src/baxter_external_devices/joystick.py
+index cc0475d..c637d1b 100644
+--- a/src/baxter_external_devices/joystick.py
++++ b/src/baxter_external_devices/joystick.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (c) 2013-2015, Rethink Robotics
+ # All rights reserved.
