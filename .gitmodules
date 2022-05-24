@@ -1,28 +1,35 @@
 [submodule "baxter"]
 	path = src/baxter
-	url = https://github.com/RethinkRobotics/baxter.git
+	url = https://github.com/UCB-ISG/baxter.git
+	pushurl = git@github.com:UCB-ISG/baxter.git
 	branch = release-1.2.0
 [submodule "baxter_common"]
 	path = src/baxter_common
-	url = https://github.com/RethinkRobotics/baxter_common.git
+	url = https://github.com/UCB-ISG/baxter_common.git
+	pushurl = git@github.com:UCB-ISG/baxter_common.git
 	branch = kinetic_optional_gripper
 [submodule "baxter_examples"]
 	path = src/baxter_examples
-	url = https://github.com/RethinkRobotics/baxter_examples.git
+	url = https://github.com/UCB-ISG/baxter_examples.git
+	pushurl = git@github.com:UCB-ISG/baxter_examples.git
 	branch = xacro_kinetic
 [submodule "baxter_interface"]
 	path = src/baxter_interface
-	url = https://github.com/RethinkRobotics/baxter_interface.git
+	url = https://github.com/UCB-ISG/baxter_interface.git
+	pushurl = git@github.com:UCB-ISG/baxter_interface.git
 	branch = release-1.2.0
 [submodule "baxter_tools"]
 	path = src/baxter_tools
-	url = https://github.com/RethinkRobotics/baxter_tools.git
+	url = https://github.com/UCB-ISG/baxter_tools.git
+	pushurl = git@github.com:UCB-ISG/baxter_tools.git
 	branch = release-1.2.0
 [submodule "moveit_robots"]
 	path = src/moveit_robots
-	url = https://github.com/ros-planning/moveit_robots.git
+	url = https://github.com/UCB-ISG/moveit_robots.git
+	pushurl = git@github.com:UCB-ISG/moveit_robots.git
 	branch = kinetic-devel
 [submodule "baxter_simulator"]
 	path = src/baxter_simulator
-	url = https://github.com/RethinkRobotics/baxter_simulator.git
+	url = https://github.com/UCB-ISG/baxter_simulator.git
+	pushurl = git@github.com:UCB-ISG/baxter_simulator.git
 	branch = kinetic-optional-grippers
